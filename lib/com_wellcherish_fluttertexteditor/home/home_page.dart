@@ -1,0 +1,40 @@
+
+import 'package:flutter/material.dart';
+
+import '../resource/strings.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(Strings.appName),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: .center,
+          children: [
+            const Text('You have pushed the button this many times:'),
+            Text(
+              '5',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {},
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
