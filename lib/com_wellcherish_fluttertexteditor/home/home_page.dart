@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 
+import '../base/ui/appbar/editor_app_bar.dart';
 import '../resource/strings.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: EditorAppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(Strings.appName),
       ),

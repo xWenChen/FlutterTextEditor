@@ -1,21 +1,26 @@
 /// 核心配置文件，包含逻辑拦截。
 library;
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:go_router/go_router.dart';
 
 import '../home/home_page.dart';
-import 'app_routes.dart';
+import 'route_constants.dart';
 
 class AppRouter {
+  static final _tag = "AppRouter";
+
   /// 1. 创建全局唯一的 Router 实例
   static final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: RouteConstants.home,
     /// 2. 调试配置（可选）
     debugLogDiagnostics: true,
     /// 3. 统一注册路由映射
     routes: [
       GoRoute(
-        path: AppRoutes.home,
+        path: RouteConstants.home,
         builder: (context, state) => const HomePage(),
       ),
       /*GoRoute(
@@ -60,4 +65,25 @@ class AppRouter {
     /// 接收 (在 GoRoute 的 builder 中获取)
     /// final data = state.extra as Map;
   );
+
+  /// 处理返回按钮
+  static Future<void> handleBack(BuildContext context) async {
+    final router = GoRouter.of(context);
+
+    // 1. 判断是否可以返回 (GoRouter 的判断方式)
+    if (router.canPop()) {
+      // 直接返回上一页
+      router.pop();
+    } else {
+      ZLog.d(_tag, "exit text editor!");
+      // 如果已经在路由最底层，退出应用
+      await SystemNavigator.pop();
+    }
+  }
+
+  /// 跳转设置页
+  static Future<void> goSettingsPage(BuildContext context) async {
+    ZLog.d(_tag, "go settings page!");
+    var result = await GoRouter.of(context).push(RouteConstants.settings);
+  }
 }
