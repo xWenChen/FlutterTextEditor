@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/router/app_router.dart';
+import '../../../resource/sizes.dart';
 import '../../../resource/strings.dart';
+import '../../extension/BuildContextExtension.dart';
 import 'AppBarSettingsItem.dart';
 
 class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,14 +27,25 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor,
       leading: leading ?? IconButton(
-        icon: const Icon(Icons.arrow_back_rounded),
+        iconSize: Sizes.appbarIcon,
+        icon: Icon(
+          Icons.arrow_back_rounded,
+          color: context.colorScheme.onPrimaryContainer,
+        ),
         onPressed: () async => AppRouter.handleBack(context),
       ),
-      title: title ?? const Text(Strings.appName),
+      title: title ?? Text(
+        Strings.appName,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: context.colorScheme.onPrimaryContainer,
+        ),
+      ),
       centerTitle: centerTitle,
       actions: actions ?? [
         AppBarSettingsItem()
       ],
+      titleSpacing: 0,
     );
   }
 

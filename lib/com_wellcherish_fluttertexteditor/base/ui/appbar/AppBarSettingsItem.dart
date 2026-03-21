@@ -1,9 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/BuildContextExtension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/resource/sizes.dart';
 import '../../../router/app_router.dart';
-import '../../../router/route_constants.dart';
 
 class AppBarSettingsItem extends StatelessWidget {
   const AppBarSettingsItem({
@@ -13,7 +12,11 @@ class AppBarSettingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.settings_rounded),
+      iconSize: Sizes.appbarIcon,
+      icon: Icon(
+        Icons.settings_rounded,
+        color: context.colorScheme.onPrimaryContainer,
+      ),
       onPressed: ()  => AppRouter.goSettingsPage(context),
     );
   }
