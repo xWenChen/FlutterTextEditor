@@ -12,7 +12,7 @@ class HomeApp extends StatelessWidget {
       routerConfig: AppRouter.router, // 注入我们写好的配置
       title: Strings.appName,
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.lightGreen),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
       ),
     );
   }

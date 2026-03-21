@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/BuildContextExtension.dart';
 
 import '../base/ui/appbar/editor_app_bar.dart';
 import '../resource/strings.dart';
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EditorAppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: context.colorScheme.inversePrimary,
         title: Text(Strings.appName),
       ),
       body: Center(
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
             const Text('You have pushed the button this many times:'),
             Text(
               '5',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: context.textTheme.headlineMedium,
             ),
           ],
         ),
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
+      backgroundColor: context.colorScheme.surface,
     );
   }
 }
