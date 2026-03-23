@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/BuildContextExtension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/resource/sizes.dart';
 import '../../../router/app_router.dart';
 

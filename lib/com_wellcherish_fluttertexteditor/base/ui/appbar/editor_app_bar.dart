@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/router/app_router.dart';
 import '../../../resource/sizes.dart';
 import '../../../resource/strings.dart';
-import '../../extension/BuildContextExtension.dart';
-import 'AppBarSettingsItem.dart';
+import '../../extension/build_context_extension.dart';
+import 'appbar_settings_item.dart';
 
 class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;

@@ -82,6 +82,6 @@ class AppRouter {
   /// 跳转设置页
   static Future<void> goSettingsPage(BuildContext context) async {
     ZLog.d(_tag, "go settings page!");
-    var result = await GoRouter.of(context).push(RouteConstants.settings);
+    await GoRouter.of(context).push(RouteConstants.settings);
   }
 }
