@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/resource/strings.dart';
 
-import '../router/app_router.dart';
+import 'router/app_router.dart';
 
-class HomeApp extends StatelessWidget {
-  const HomeApp({super.key});
+class TextEditorApp extends StatelessWidget {
+  const TextEditorApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +14,7 @@ class HomeApp extends StatelessWidget {
       title: Strings.appName,
       // 亮色主题
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: color,
           brightness: Brightness.light,

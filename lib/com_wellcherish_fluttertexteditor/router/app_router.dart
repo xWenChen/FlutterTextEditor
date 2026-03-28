@@ -4,9 +4,10 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
-import '../home/home_page.dart';
+import '../page/home/home_page.dart';
 import 'route_constants.dart';
 
 class AppRouter {
@@ -14,9 +15,13 @@ class AppRouter {
 
   /// 1. 创建全局唯一的 Router 实例
   static final GoRouter router = GoRouter(
-    initialLocation: RouteConstants.home,
+    initialLocation: RouteConstants.splash,
     /// 3. 统一注册路由映射
     routes: [
+      GoRoute(
+        path: RouteConstants.splash,
+        builder: (context, state) => const SplashPage(),
+      ),
       GoRoute(
         path: RouteConstants.home,
         builder: (context, state) => const HomePage(),

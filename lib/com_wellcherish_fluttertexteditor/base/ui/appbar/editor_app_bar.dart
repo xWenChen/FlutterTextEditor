@@ -15,7 +15,7 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const EditorAppBar({
     super.key,
-    this.backgroundColor,
+    required this.backgroundColor,
     this.leading,
     this.title,
     this.centerTitle = false,

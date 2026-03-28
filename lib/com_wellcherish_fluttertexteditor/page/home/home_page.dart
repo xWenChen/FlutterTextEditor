@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 
-import '../base/ui/appbar/editor_app_bar.dart';
+import '../../base/ui/appbar/editor_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,10 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: EditorAppBar(
-        backgroundColor: context.colorScheme.primaryContainer,
-      ),
+    return BaseView(
       body: Center(
         child: Column(
           mainAxisAlignment: .center,
@@ -34,8 +32,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () => {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ),
-      backgroundColor: context.colorScheme.surface,
+      )
     );
   }
 }
