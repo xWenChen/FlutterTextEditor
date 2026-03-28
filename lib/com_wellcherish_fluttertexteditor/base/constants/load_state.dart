@@ -6,6 +6,8 @@ enum LoadState {
   loading,
   /// 加载完成。
   completed,
+  /// 没有数据
+  empty,
   /// 加载失败。
   error,
 }

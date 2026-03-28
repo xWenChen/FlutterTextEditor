@@ -14,7 +14,6 @@ class FileItemDatabase {
   static final _tag = "FileItemDatabase";
 
   late final FileItemDao fileDao;
-  late final Isar _isar;
 
   /// 1. 静态私有实例（设为可空，因为需要运行时动态创建）
   static FileItemDatabase? _instance;
@@ -41,7 +40,6 @@ class FileItemDatabase {
     );
 
     _instance ??= FileItemDatabase._internal()
-      .._isar = isarObj
       ..fileDao = FileItemDao(isarObj);
   }
 

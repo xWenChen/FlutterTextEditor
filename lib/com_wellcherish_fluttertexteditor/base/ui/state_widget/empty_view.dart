@@ -5,9 +5,18 @@ import '../../../resource/strings.dart';
 import '../../constants/material3/app_size.dart';
 
 /// 空状态视图
-class EmptyView extends StatelessWidget {
-  const EmptyView({super.key});
+class EmptyView extends StatefulWidget {
+  final String text;
+  const EmptyView({
+    super.key,
+    this.text = Strings.noData
+  });
 
+  @override
+  State<EmptyView> createState() => _EmptyViewState();
+}
+
+class _EmptyViewState extends State<EmptyView> {
   @override
   Widget build(BuildContext context) {
     return StateView(
@@ -19,7 +28,7 @@ class EmptyView extends StatelessWidget {
         image: AssetImage("assets/images/ic_no_file.png"),
       ),
       // 对应 R.string.empty_page_tips
-      text: Strings.noData,
+      text: widget.text,
     );
   }
 }

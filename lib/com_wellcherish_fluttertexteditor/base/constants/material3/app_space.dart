@@ -5,4 +5,6 @@ class AppSpace {
   static const double medium = 16.0;  // M3 默认的标准边距
   static const double large = 24.0;
   static const double extraLarge = 32.0;
+  static const double doubleLarge = 48.0;
+  static const double doubleExtraLarge = 64.0;
 }
