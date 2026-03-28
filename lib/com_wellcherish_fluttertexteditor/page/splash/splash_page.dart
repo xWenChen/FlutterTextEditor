@@ -19,8 +19,11 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends BaseState<SplashViewModel, SplashPage> {
 
   @override
-  SplashViewModel createViewModel() {
-    return SplashViewModel();
+  void createViewModel() {
+    viewModel = SplashViewModel();
+    viewModel
+      ..addListener(_handleStateChanged)
+      ..initApp();
   }
 
   @override
@@ -30,8 +33,7 @@ class _SplashPageState extends BaseState<SplashViewModel, SplashPage> {
       builder: (context, child) {
         switch (viewModel.state) {
           case AppInitState.completed:
-            // 进入下个页面，并将本页面从堆栈中移除。
-            context.goRouter.go(RouteConstants.home);
+          /// UI层代码，和逻辑层代码分开。
             return SizedBox.shrink();
           case AppInitState.error:
             return EmptyView();
@@ -40,5 +42,18 @@ class _SplashPageState extends BaseState<SplashViewModel, SplashPage> {
         }
       },
     );
+  }
+
+  /// 逻辑层代码
+  void _handleStateChanged() {
+    if (viewModel.state == AppInitState.completed) {
+      // 帧后跳转，解决“setState during build”报错。进入下个页面，并将本页面从堆栈中移除。
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // 检查组件是否挂在树上
+        if (mounted) {
+          context.goRouter.go(RouteConstants.home);
+        }
+      });
+    }
   }
 }

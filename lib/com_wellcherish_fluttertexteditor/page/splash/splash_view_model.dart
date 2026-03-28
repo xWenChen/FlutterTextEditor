@@ -12,8 +12,12 @@ class SplashViewModel extends BaseViewModel {
   Future<void> initApp() async {
     try {
       updateAppInitState(AppInitState.running);
-      /// 初始化数据库。
-      FileItemDatabase.initialize();
+      /// 初始化数据库。最小等待2秒。
+      // 并发执行：业务逻辑 vs 固定倒计时
+      await Future.wait([
+        FileItemDatabase.initialize(), // 你的业务初始化逻辑
+        Future.delayed(const Duration(seconds: 2)), // 强制等待 2 秒
+      ]);
       updateAppInitState(AppInitState.completed);
     } catch (e, stackTrace) {
       ZLog.e(_tag, error: e, stackTrace: stackTrace);

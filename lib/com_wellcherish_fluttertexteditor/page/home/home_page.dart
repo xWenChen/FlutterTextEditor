@@ -16,8 +16,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends BaseState<HomeViewModel, HomePage> {
   @override
-  HomeViewModel createViewModel() {
-    return HomeViewModel();
+  void createViewModel() {
+    viewModel =  HomeViewModel();
   }
 
   @override
@@ -25,7 +25,12 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
     return BaseView(
       viewModel: viewModel,
       builder: (context, child) {
-        return LoadingView(text: Strings.dataLoading,);
+        return Container(
+          alignment: Alignment.center,
+          width: 200,
+          height: 200,
+          color: Colors.cyan,
+        );
         /*switch (viewModel.state) {
           case LoadState.completed:
             // 展示列表
