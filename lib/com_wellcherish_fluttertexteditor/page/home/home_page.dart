@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/state_widget/loading_view.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/home/home_view_model.dart';
 
-import '../../base/ui/appbar/editor_app_bar.dart';
+import '../../resource/strings.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,27 +14,28 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends BaseState<HomeViewModel, HomePage> {
+  @override
+  HomeViewModel createViewModel() {
+    return HomeViewModel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseView(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '5',
-              style: context.textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      )
+      viewModel: viewModel,
+      builder: (context, child) {
+        return LoadingView(text: Strings.dataLoading,);
+        /*switch (viewModel.state) {
+          case LoadState.completed:
+            // 展示列表
+            return SizedBox.shrink();
+          case LoadState.error:
+            return EmptyView();
+          default:
+            return LoadingView(text: Strings.dataLoading,);
+        }*/
+      },
     );
   }
 }

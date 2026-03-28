@@ -1,29 +1,33 @@
+import 'package:isar/isar.dart';
 
-import 'package:drift/drift.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/constants/constants.dart';
+// 必须包含这行，运行 build_runner 后生成的文件
+part 'file_item.g.dart';
 
-/// 这里的类名默认会生成 FileItems 类，表名默认是 file_items
-/// 如果想指定表名，重写 tableName 属性
+/// 一个类对应数据库中的一张表（Collection）
+@collection
+class FileItem {
+  /// 必须有 Id 字段，Isar.autoIncrement 会自动分配
+  Id id = Isar.autoIncrement;
 
-/// class 名称为复数，DataClassName为单数。
-@DataClassName("FileItem")
-class FileItems extends Table {
-  @override
-  String get tableName => DbConstants.tableName;
+  /// 唯一索引，查询速度极快。
+  /// replace: true 是冲突解决策略。
+  @Index(unique: true, replace: true)
+  String contentId;
 
-  /// 主键：自增 Long 类型 (Int64)
-  /// 调用 .autoIncrement() 时，Drift 内部会自动为该字段添加 PRIMARY KEY 约束。
-  IntColumn get id => integer().autoIncrement()();
-  /// 内容 ID (对应 Room 的 ColumnInfo)
-  TextColumn get contentId => text()();
-  /// 文件地址：允许为空 (对应 Room 的 String?)
-  TextColumn get filePath => text().nullable()();
-  /// 文件标题：允许为空
-  TextColumn get title => text().nullable()();
+  String? filePath;
+  String? title;
 
-  /// 更新时间：Drift 可以直接存 DateTime，也可以存 Int64 毫秒
-  IntColumn get updateTime => integer()();
+  @Index()
+  int updateTime;
 
-  /// 是否删除：布尔类型
-  BoolColumn get isDeleted => boolean()();
+  @Index()
+  bool isDeleted;
+
+  FileItem({
+    required this.contentId,
+    this.filePath,
+    this.title,
+    required this.updateTime,
+    this.isDeleted = false,
+  });
 }

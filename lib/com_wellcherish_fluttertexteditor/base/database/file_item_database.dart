@@ -1,24 +1,26 @@
 
 // 这行是必须的，用于指向生成的文件
-import 'package:drift/drift.dart';
+import 'dart:io';
+
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 import '../log/log.dart';
 import 'bean/file_item.dart';
 import 'dao/file_item_dao.dart';
+import 'package:isar/isar.dart';
 
-part 'file_item_database.g.dart';
-
-@DriftDatabase(
-    tables: [FileItems],
-    daos: [FileItemDao]
-)
-class FileItemDatabase extends _$FileItemDatabase {
+class FileItemDatabase {
   static final _tag = "FileItemDatabase";
-  late final FileItemDao fileDao = FileItemDao(this);
-  /// 1. 私有构造函数，接收执行器并传给父类
-  FileItemDatabase._internal(super.e);
-  /// 2. 静态私有实例（设为可空，因为需要运行时动态创建）
+
+  late final FileItemDao fileDao;
+  late final Isar _isar;
+
+  /// 1. 静态私有实例（设为可空，因为需要运行时动态创建）
   static FileItemDatabase? _instance;
+
+  /// 2. 私有构造函数。
+  FileItemDatabase._internal();
   /// 3. 工厂构造函数
   factory FileItemDatabase() {
     if (_instance == null) {
@@ -28,11 +30,31 @@ class FileItemDatabase extends _$FileItemDatabase {
     }
     return _instance!;
   }
-  /// 4. 提供一个静态初始化方法（传入查询执行器）,在runApp前调用。
-  static void initialize(QueryExecutor executor) {
-    _instance ??= FileItemDatabase._internal(executor);
+
+  static Future<void> initialize() async {
+    final dir = await _getDbDir();
+
+    final isarObj = await Isar.open(
+      [FileItemSchema], // 自动生成的 Schema
+      directory: dir.path,
+      inspector: true, // 开启调试浏览器，可以在电脑端查看数据库内容
+    );
+
+    _instance ??= FileItemDatabase._internal()
+      .._isar = isarObj
+      ..fileDao = FileItemDao(isarObj);
   }
 
-  @override
-  int get schemaVersion => 1;
+  static Future<Directory> _getDbDir() async {
+    /// 1. 获取基础文档目录
+    final dir = await getApplicationDocumentsDirectory();
+    /// 2. 构造自定义子目录路径 (例如: .../app_docs/database)
+    final dbFileDir = Directory(path.join(dir.path, "database"));
+    /// 3. 检测并创建目录。recursive: true 确保如果父目录不存在也会一并创建
+    if (!await dbFileDir.exists()) {
+      await dbFileDir.create(recursive: true);
+    }
+
+    return dbFileDir;
+  }
 }

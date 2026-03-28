@@ -4,7 +4,6 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/st
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/resource/strings.dart';
 
 import '../../constants/material3/app_size.dart';
-import '../../extension/build_context_extension.dart';
 
 class LoadingView extends StatefulWidget {
   final String text;

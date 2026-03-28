@@ -1,18 +1,20 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view_model.dart';
 
 import '../extension/build_context_extension.dart';
 import '../ui/appbar/editor_app_bar.dart';
 
-class BaseView extends StatefulWidget {
-  final Widget? body;
+class BaseView<T extends BaseViewModel> extends StatefulWidget {
+  final T viewModel;
+  final TransitionBuilder builder;
   final EditorAppBar? appBar;
   final FloatingActionButton? floatingActionButton;
 
   const BaseView({
     super.key,
-    required this.body,
+    required this.viewModel,
+    required this.builder,
     this.appBar,
     this.floatingActionButton,
   });
@@ -28,7 +30,10 @@ class _BaseViewState extends State<BaseView> {
       appBar: widget.appBar ?? EditorAppBar(
         backgroundColor: context.colorScheme.primaryContainer,
       ),
-      body: widget.body,
+      body: ListenableBuilder(
+        listenable: widget.viewModel,
+        builder: widget.builder,
+      ),
       floatingActionButton: widget.floatingActionButton,
       backgroundColor: context.colorScheme.surface,
     );
