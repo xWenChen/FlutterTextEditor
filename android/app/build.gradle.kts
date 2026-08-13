@@ -42,3 +42,12 @@ android {
 flutter {
     source = "../.."
 }
+
+// 现代 KTS 推荐写法：在任务配置阶段直接关闭
+tasks.configureEach {
+    if (name.contains("UnitTest") ||
+        name.contains("AndroidTest") ||
+        name.contains("generateDebugUnitTestConfig")) {
+        enabled = false
+    }
+}

@@ -11,6 +11,9 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
   final TransitionBuilder builder;
   final EditorAppBar? appBar;
   final Widget? floatingActionButton;
+  // canPop=false时，用户需要点击两次返回按钮，才能退出应用。
+  final bool canPop;
+  final PopInvokedWithResultCallback? onPopInvokedWithResult;
 
   const BaseView({
     super.key,
@@ -18,6 +21,8 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
     required this.builder,
     this.appBar,
     this.floatingActionButton,
+    this.canPop = true,
+    this.onPopInvokedWithResult,
   });
 
   @override
@@ -27,18 +32,20 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
 class _BaseViewState extends State<BaseView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: widget.appBar ?? EditorAppBar(
-        backgroundColor: context.colorScheme.primaryContainer,
+    return PopScope(
+      canPop: widget.canPop,
+      onPopInvokedWithResult: widget.onPopInvokedWithResult,
+      child: Scaffold(
+        appBar: widget.appBar ?? EditorAppBar(),
+        body: ListenableBuilder(
+          listenable: widget.viewModel,
+          builder: widget.builder,
+        ),
+        // 默认就是这个位置，间距为 16
+        floatingActionButtonLocation: CustomFabLocation(),
+        floatingActionButton: widget.floatingActionButton,
+        backgroundColor: context.appBackground,
       ),
-      body: ListenableBuilder(
-        listenable: widget.viewModel,
-        builder: widget.builder,
-      ),
-      // 默认就是这个位置，间距为 16
-      floatingActionButtonLocation: CustomFabLocation(),
-      floatingActionButton: widget.floatingActionButton,
-      backgroundColor: context.colorScheme.surface,
     );
   }
 }

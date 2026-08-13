@@ -7,6 +7,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/l
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
+import '../page/editor/editor_page.dart';
 import '../page/home/home_page.dart';
 import 'route_constants.dart';
 
@@ -15,7 +16,7 @@ class AppRouter {
 
   /// 1. 创建全局唯一的 Router 实例
   static final GoRouter router = GoRouter(
-    initialLocation: RouteConstants.splash,
+    initialLocation: RouteConstants.editor,
     /// 3. 统一注册路由映射
     routes: [
       GoRoute(
@@ -26,11 +27,11 @@ class AppRouter {
         path: RouteConstants.home,
         builder: (context, state) => const HomePage(),
       ),
-      /*GoRoute(
-        path: AppRoutes.editor,
+      GoRoute(
+        path: RouteConstants.editor,
         builder: (context, state) => const EditorPage(),
       ),
-      // 带参数的路由, :id是占位符
+      /*// 带参数的路由, :id是占位符
       GoRoute(
         path: '${AppRoutes.setting}/:id',
         builder: (context, state) {

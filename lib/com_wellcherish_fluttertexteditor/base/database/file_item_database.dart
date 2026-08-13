@@ -24,7 +24,7 @@ class FileItemDatabase {
   factory FileItemDatabase() {
     if (_instance == null) {
       var errorMsg = "not initialized, call initialize() first.";
-      ZLog.e(_tag, message: errorMsg);
+      ZLog.e(_tag, errorMsg);
       throw Exception(errorMsg);
     }
     return _instance!;

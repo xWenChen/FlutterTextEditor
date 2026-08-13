@@ -8,9 +8,7 @@ class ZLog {
   ZLog._internal() {
     // 在私有构造函数里进行初始化配置
     logger = Logger(
-      printer: PrettyPrinter(
-          dateTimeFormat: DateTimeFormat.dateAndTime
-      ),
+      printer: SimplePrinter(printTime: true),
     );
   }
 
@@ -21,7 +19,7 @@ class ZLog {
   static void w(String tag, String message) {
     ZLog().logger.w("[$tag] $message}");
   }
-  static void e(String tag, {String? message, dynamic error, StackTrace? stackTrace}) {
+  static void e(String tag, [String? message, dynamic error, StackTrace? stackTrace]) {
     ZLog().logger.e("[$tag] ${message ?? ""}", error: error, stackTrace: stackTrace);
   }
 }

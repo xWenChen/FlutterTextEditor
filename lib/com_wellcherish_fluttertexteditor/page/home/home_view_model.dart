@@ -22,7 +22,7 @@ class HomeViewModel extends BaseViewModel {
         updateAppInitState(LoadState.empty);
       }
     } catch (e, stackTrace) {
-      ZLog.e(_tag, error: e, stackTrace: stackTrace);
+      ZLog.e(_tag, "", e, stackTrace);
       updateAppInitState(LoadState.error);
     }
   }

@@ -7,32 +7,32 @@ import '../../extension/build_context_extension.dart';
 import 'appbar_settings_item.dart';
 
 class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Color? backgroundColor;
   final Widget? leading;
   final Widget? title;
   final bool centerTitle;
   final List<Widget>? actions;
+  final Future<void> Function()? handleBack;
 
   const EditorAppBar({
     super.key,
-    required this.backgroundColor,
     this.leading,
     this.title,
     this.centerTitle = false,
-    this.actions
+    this.actions,
+    this.handleBack,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: backgroundColor,
+      backgroundColor: context.colorScheme.primaryContainer,
       leading: leading ?? IconButton(
         iconSize: Sizes.appbarIcon,
         icon: Icon(
           Icons.arrow_back_rounded,
           color: context.colorScheme.onPrimaryContainer,
         ),
-        onPressed: () async => AppRouter.handleBack(context),
+        onPressed: handleBack ?? () async => AppRouter.handleBack(context),
       ),
       title: title ?? Text(
         Strings.appName,
@@ -46,6 +46,11 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
         AppBarSettingsItem()
       ],
       titleSpacing: 0,
+      /// 禁用在滚动内容时，自动触发的“抬升”效果。
+      /// 即使你没有显式设置，AppBar 也会改变背景颜色，混合一种叫 surfaceTintColor 的颜色，使得背景看起来变深或变色。
+      /// 表现出来的效果就是标题栏变色，金禁用后标题栏不会变色。
+      surfaceTintColor: Colors.transparent, // 禁用自动变色
+      scrolledUnderElevation: 0,            // 禁用滚动时的阴影/深度效果
     );
   }
 

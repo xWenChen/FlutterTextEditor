@@ -20,7 +20,7 @@ class SplashViewModel extends BaseViewModel {
       ]);
       updateAppInitState(AppInitState.completed);
     } catch (e, stackTrace) {
-      ZLog.e(_tag, error: e, stackTrace: stackTrace);
+      ZLog.e(_tag, "", e, stackTrace);
       updateAppInitState(AppInitState.error);
     }
   }
