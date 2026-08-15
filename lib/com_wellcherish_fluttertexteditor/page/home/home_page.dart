@@ -9,7 +9,9 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/st
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/home/home_view_model.dart';
 
 import '../../base/constants/load_state.dart';
+import '../../base/extension/build_context_extension.dart';
 import '../../resource/strings.dart';
+import '../../router/route_constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -50,6 +52,9 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
         child: FloatingActionButton(
           onPressed: () {
             /// 进入创建文本文件的页面。
+            if (mounted) {
+              context.goRouter.go(RouteConstants.editor);
+            }
           },
           shape: CircleBorder(),
           child: Icon(
