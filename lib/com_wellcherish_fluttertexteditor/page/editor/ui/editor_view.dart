@@ -48,8 +48,6 @@ class _EditorViewState extends State<EditorView> {
   void initState() {
     super.initState();
     _titleController = widget.titleController;
-    // 监听文本变化，实时刷新 UI 上的叉号。
-    _titleController.addListener(updateTitleUI);
     _contentController = widget.contentController;
     _contentController.addListener(updateWaitState);
     _scrollController = ScrollController();
@@ -60,7 +58,6 @@ class _EditorViewState extends State<EditorView> {
   @override
   void dispose() {
     super.dispose();
-    _titleController.removeListener(updateTitleUI);
     _contentController.removeListener(updateWaitState);
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
@@ -118,10 +115,6 @@ class _EditorViewState extends State<EditorView> {
 
   void updateWaitState() {
     currentMaxScrollExtent = _scrollController.position.maxScrollExtent;
-  }
-
-  void updateTitleUI() {
-    setState(() {});
   }
 
   void _scrollListener() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_state.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/file_save_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/appbar/editor_app_bar.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/editor/ui/editor_view.dart';
 
@@ -31,13 +32,26 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
     _titleController = TextEditingController();
     _contentController = TextEditingController();
 
+    viewModel.init();
+
     viewModel.startAutoSave();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // 监听文本变化，实时刷新 UI 上的叉号。
+    _titleController.addListener(onTitleChanged);
+    _contentController.addListener(onContentChanged);
+
   }
 
   @override
   void dispose() {
     super.dispose();
+    _titleController.removeListener(onTitleChanged);
     _titleController.dispose();
+    _contentController.addListener(onContentChanged);
     _contentController.dispose();
   }
 
@@ -76,6 +90,18 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
 
     // 执行保存操作
     await viewModel.trySave();
+  }
+
+  void onTitleChanged() {
+    setState(() {
+      viewModel.changeContentSaveState(FileSaveState.unsaved);
+    });
+  }
+
+  void onContentChanged() {
+    setState(() {
+      viewModel.changeContentSaveState(FileSaveState.unsaved);
+    });
   }
 
   void _showSaveErrorTip() {

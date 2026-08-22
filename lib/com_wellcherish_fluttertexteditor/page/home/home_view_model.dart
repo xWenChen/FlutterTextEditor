@@ -1,5 +1,6 @@
 
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view_model.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/bean/file_item.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
@@ -7,7 +8,7 @@ import '../../base/constants/load_state.dart';
 
 class HomeViewModel extends BaseViewModel {
   static final _tag = "HomeViewModel";
-  List<FileItem> dataList = List.empty();
+  List<FileData> dataList = List.empty();
   final _dataSource = FileDataSource();
   LoadState state = LoadState.none;
 

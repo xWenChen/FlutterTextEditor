@@ -73,4 +73,17 @@ class EditorFileUtils {
     // 干掉短横线。
     return v4.replaceAll("-", "");
   }
+
+  /// 获取文件内容
+  static Future<String?> getFileContentByPath(String? filePath) async {
+    if (filePath == null) return null;
+    return await getFileContentByFile(File(filePath));
+  }
+
+  /// 获取文件内容
+  static Future<String?> getFileContentByFile(File? file) async {
+    if (file == null) return null;
+    if (!(await file.exists())) return null;
+    return file.readAsString();
+  }
 }

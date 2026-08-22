@@ -30,4 +30,20 @@ class FileItem {
     required this.updateTime,
     this.isDeleted = false,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FileItem &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          contentId == other.contentId &&
+          filePath == other.filePath &&
+          title == other.title &&
+          updateTime == other.updateTime &&
+          isDeleted == other.isDeleted;
+
+  @override
+  int get hashCode =>
+      Object.hash(id, contentId, filePath, title, updateTime, isDeleted);
 }

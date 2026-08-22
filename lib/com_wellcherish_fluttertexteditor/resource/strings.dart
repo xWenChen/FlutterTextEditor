@@ -13,4 +13,6 @@ class Strings {
   static const String saved = "已保存";
   static const String clearText = "清除文本";
   static const String saveFail = "保存失败";
+  static const String noTitle = "暂无标题";
+  static const String noText = "暂无文本";
 }

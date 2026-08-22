@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view_model.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/config/app_config.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
 
 import '../../base/bean/file_data.dart';
 import '../../base/constants/file_change_type.dart';
@@ -14,6 +15,8 @@ import '../../base/log/log.dart';
 
 class EditorViewModel extends BaseViewModel {
   static final _tag = "EditorViewModel";
+
+  final _dataSource = FileDataSource();
 
   FileSaveState saveState = FileSaveState.saved;
   FileChangeType fileChangeType = FileChangeType.unknown;
@@ -89,6 +92,8 @@ class EditorViewModel extends BaseViewModel {
     // 正在保存中，不重复保存。
     if (isSaving) return;
 
+    saveState = FileSaveState.saving;
+
     String currentTitle = getTitle();
     String currentText = getContent();
 
@@ -96,10 +101,14 @@ class EditorViewModel extends BaseViewModel {
     if (currentTitle != _lastSavedTitle || currentText != _lastSavedContent) {
       print("内容已变更，准备存入文件...");
       await saveToFile(currentTitle, currentText);
+      // 更新数据库。
+      //await _dataSource.insertOrUpdateOne(data);
       // 更新最后一次保存的内容
       _lastSavedTitle = currentTitle;
       _lastSavedContent = currentText;
     }
+
+    saveState = FileSaveState.saved;;
   }
 
   Future<void> saveToFile(String title, String content) async {

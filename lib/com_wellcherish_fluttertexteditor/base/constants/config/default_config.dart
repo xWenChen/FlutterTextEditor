@@ -16,4 +16,12 @@ class DefaultConfig {
    * 编辑器保存字符数量时，是否忽略首尾空格。
    * */
   static final bool editorSaveTrimText = false;
+  /**
+   * 列表数据，标题可以展示的行数。
+   * */
+  static final int listTitleLines = 1;
+  /**
+   * 列表数据，文本可以展示的行数。
+   * */
+  static final int listTextLines = 2;
 }

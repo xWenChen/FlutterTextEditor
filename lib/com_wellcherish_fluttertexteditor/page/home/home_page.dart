@@ -7,6 +7,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/const
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/state_widget/empty_view.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/state_widget/loading_view.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/home/home_view_model.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/home/ui/file_list_view.dart';
 
 import '../../base/constants/load_state.dart';
 import '../../base/extension/build_context_extension.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
         switch (viewModel.state) {
           case LoadState.completed:
             // 展示列表
-            return SizedBox.shrink();
+            return FileListView(fileDataList: viewModel.dataList);
           case LoadState.empty:
             return EmptyView();
           case LoadState.error:
