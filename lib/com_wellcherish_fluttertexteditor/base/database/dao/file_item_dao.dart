@@ -7,7 +7,7 @@ class FileItemDao {
   FileItemDao(this.isar);
 
   /// 1. 查询所有。where() 的作用是**“开启索引查询通道”**。Where（走索引） 和 Filter（走过滤）。
-  Future<List<FileItem>> queryAll() => isar.fileItems.where().findAll();
+  Future<List<FileItem>> queryAll() async => isar.fileItems.where().findAll();
 
   /// 2. 根据 ID 列表查询
   Future<List<FileItem>> loadAllByIds(List<int> ids) {
@@ -34,7 +34,7 @@ class FileItemDao {
   }
 
   /// 5. 根据 ContentID 查询单条
-  Future<FileItem?> queryByContentId(String contentId) {
+  Future<FileItem?> queryByContentId(String contentId) async {
     return isar.fileItems.filter().contentIdEqualTo(contentId).findFirst();
   }
 

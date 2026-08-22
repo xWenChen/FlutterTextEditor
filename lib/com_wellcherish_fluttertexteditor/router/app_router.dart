@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
@@ -20,16 +21,29 @@ class AppRouter {
     /// 3. 统一注册路由映射
     routes: [
       GoRoute(
-        path: RouteConstants.splash,
+        name: RouteConstants.splash,
+        path: "${RouteConstants.schema}${RouteConstants.splash}",
         builder: (context, state) => const SplashPage(),
       ),
       GoRoute(
-        path: RouteConstants.home,
+        name: RouteConstants.home,
+        path: "${RouteConstants.schema}${RouteConstants.home}",
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(
-        path: RouteConstants.editor,
-        builder: (context, state) => const EditorPage(),
+        name: RouteConstants.editor,
+        path: "${RouteConstants.schema}${RouteConstants.editor}",
+        builder: (context, state) {
+          // 从 queryParameters 中提取 contentId，如果 URL 没带 ?contentId=xxx 则为 null
+          final contentId = state.uri.queryParameters[RouteConstants.editorParamContentId];
+
+          // 如果想要兼顾 extra 传递默认对象，也可以这样取：
+          // final initialData = state.extra as FileData?;
+
+          return EditorPage(
+            contentId: contentId, // null 表示新建，有值表示编辑
+          );
+        },
       ),
       /*// 带参数的路由, :id是占位符
       GoRoute(

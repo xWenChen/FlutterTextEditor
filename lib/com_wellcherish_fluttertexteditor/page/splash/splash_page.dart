@@ -51,7 +51,7 @@ class _SplashPageState extends BaseState<SplashViewModel, SplashPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         // 检查组件是否挂在树上
         if (mounted) {
-          context.goRouter.go(RouteConstants.home);
+          context.goRouter.goNamed(RouteConstants.home);
         }
       });
     }

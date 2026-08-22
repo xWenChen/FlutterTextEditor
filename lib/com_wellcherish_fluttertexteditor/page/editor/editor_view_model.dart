@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view_model.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/config/app_config.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/bean/file_item.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
 
 import '../../base/bean/file_data.dart';
@@ -39,21 +40,43 @@ class EditorViewModel extends BaseViewModel {
     this.file,
   });
 
-  Future<void> init({FileData? fileData}) async {
-    if (fileData == null) {
+  Future<void> init(String? contentId) async {
+    if (contentId == null) {
       // 没有从上个页面传入文件信息，则视作新建 txt。
       await openNewFile();
     } else {
-      await openExistFile(fileData);
+      currentOpenFile = await _dataSource.queryByContentId(contentId);
+      await openExistFile();
     }
   }
 
   Future<void> openNewFile() async {
-
+    final contentId = EditorFileUtils.getUUID();
+    file = await EditorFileUtils.getNewTxtFile(fileName: contentId);
+    currentOpenFile = FileData(
+      fileItem: FileItem(
+        contentId: contentId,
+        updateTime: DateTime.now().millisecondsSinceEpoch,
+      ),
+    );
+    _lastSavedTitle = "";
+    _lastSavedContent = "";
+    notifyListeners();
   }
 
-  Future<void> openExistFile(FileData fileData) async {
+  Future<void> openExistFile() async {
+    final fileData = currentOpenFile;
+    if (fileData == null) {
+      return;
+    }
 
+    file = File(fileData.fileItem?.filePath ?? '');
+    if (!(await file?.exists() ?? false)) {
+      await file?.create();
+    }
+    _lastSavedTitle = fileData.title ?? "";
+    _lastSavedContent = fileData.content ?? "";
+    notifyListeners();
   }
 
   /// 文件已经保存了，才允许直接退出。
@@ -108,7 +131,7 @@ class EditorViewModel extends BaseViewModel {
       _lastSavedContent = currentText;
     }
 
-    saveState = FileSaveState.saved;;
+    saveState = FileSaveState.saved;
   }
 
   Future<void> saveToFile(String title, String content) async {

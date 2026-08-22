@@ -54,7 +54,7 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
           onPressed: () {
             /// 进入创建文本文件的页面。
             if (mounted) {
-              context.goRouter.go(RouteConstants.editor);
+              context.goRouter.goNamed(RouteConstants.editor);
             }
           },
           shape: CircleBorder(),

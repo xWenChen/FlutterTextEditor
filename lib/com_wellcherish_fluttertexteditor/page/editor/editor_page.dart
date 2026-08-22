@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_state.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/file_save_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/appbar/editor_app_bar.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/editor/ui/editor_view.dart';
@@ -10,7 +11,12 @@ import '../../resource/strings.dart';
 import 'editor_view_model.dart';
 
 class EditorPage extends StatefulWidget {
-  const EditorPage({super.key});
+  final String? contentId;
+
+  const EditorPage({
+    super.key,
+    this.contentId,
+  });
 
   @override
   State<EditorPage> createState() => _EditorPageState();
@@ -32,7 +38,7 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
     _titleController = TextEditingController();
     _contentController = TextEditingController();
 
-    viewModel.init();
+    viewModel.init(widget.contentId);
 
     viewModel.startAutoSave();
   }

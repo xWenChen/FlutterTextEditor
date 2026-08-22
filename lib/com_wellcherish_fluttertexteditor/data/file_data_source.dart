@@ -21,6 +21,11 @@ class FileDataSource {
     return await _dbListToUIList(dbList);
   }
 
+  Future<FileData?> queryByContentId(String contentId) async {
+    final fileItem = await _dao.queryByContentId(contentId);
+    return await _dbItemToUIItem(fileItem);
+  }
+
   /// 插入或者更新 (Isar 的 put 会根据 ID 自动处理新增或覆盖)
   Future<void> insertOrUpdateOne(FileItem data) async {
     await _dao.updateOne(data);
@@ -34,5 +39,16 @@ class FileDataSource {
     });
 
     return uiList;
+  }
+
+  Future<FileData?> _dbItemToUIItem(FileItem? fileItem) async {
+    if (fileItem == null) return null;
+
+    final data = FileData(fileItem: fileItem);
+
+    final fileText = await EditorFileUtils.getFileContentByPath(fileItem.filePath);
+    data.content = EditorFileUtils.splitTitleAndText(fileText).$2;
+
+    return data;
   }
 }

@@ -6,7 +6,9 @@ class FileData {
 
   String? content;
 
-  late String? title = fileItem?.title;
+  String? get title => fileItem?.title;
+
+  String? get contentId => fileItem?.contentId;
 
   FileData({
     required this.fileItem,

@@ -32,7 +32,7 @@ class EditorFileUtils {
     return (result[0], result[1]);
   }
 
-  static Future<File?> getNewTxtFile([String? fileName]) async {
+  static Future<File?> getNewTxtFile({String? fileName}) async {
     if (fileName.isNullOrEmpty) {
       fileName = getUUID();
     }
