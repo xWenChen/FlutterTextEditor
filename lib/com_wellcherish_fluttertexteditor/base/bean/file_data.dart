@@ -7,8 +7,10 @@ class FileData {
   String? content;
 
   String? get title => fileItem?.title;
+  set title(String? title) => fileItem?.title = title;
 
   String? get contentId => fileItem?.contentId;
+  set contentId(String? contentId) => fileItem?.contentId = contentId ?? '';
 
   FileData({
     required this.fileItem,
