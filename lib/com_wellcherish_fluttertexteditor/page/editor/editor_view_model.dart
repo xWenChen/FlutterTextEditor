@@ -6,6 +6,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/config/app_config.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/bean/file_item.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/file_extension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/utils/EventManager.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
 
@@ -98,6 +99,14 @@ class EditorViewModel extends BaseViewModel {
     currentFileData = null;
   }
 
+  bool titleSame(String title) {
+    return _lastSavedTitle == title;
+  }
+
+  bool contentSame(String content) {
+    return _lastSavedContent == content;
+  }
+
   /// 更新保存状态并通知 UI
   void changeContentSaveState(FileSaveState newState) {
     if (saveState == newState) return;
@@ -114,50 +123,54 @@ class EditorViewModel extends BaseViewModel {
   }
 
   Future<void> trySave() async {
+    String currentTitle = getTitle();
+    String currentText = getContent();
+
+    if (currentTitle == _lastSavedTitle && currentText == _lastSavedContent) {
+      return;
+    }
+
     // 正在保存中，不重复保存。
     if (isSaving) return;
 
     changeContentSaveState(FileSaveState.saving);
 
-    String currentTitle = getTitle();
-    String currentText = getContent();
-
     // 判断是否有变更
-    if (currentTitle != _lastSavedTitle || currentText != _lastSavedContent) {
-      print("内容已变更，准备存入文件...");
-      final ok = await saveToFile(currentTitle, currentText);
-      if (!ok) {
-        ZLog.e(_tag, "trySave file failed");
-        return;
-      }
-
-      final data = currentFileData;
-      if (data == null) {
-        ZLog.e(_tag, "trySave file failed, data = null");
-        return;
-      }
-      final dbItem = data.fileItem;
-      if (dbItem == null) {
-        ZLog.e(_tag, "trySave file failed, dbItem = null");
-        return;
-      }
-
-      // 更新数据库。
-      data.content = currentText;
-
-      dbItem
-        ..title = currentTitle
-        ..filePath = file?.absolutePath
-        ..updateTime = DateTime.now().millisecondsSinceEpoch;
-
-      await _dataSource.insertOrUpdateOne(dbItem);
-
-      // 更新最后一次保存的内容
-      _lastSavedTitle = currentTitle;
-      _lastSavedContent = currentText;
-
-      EventManager.emit(FileChangeType.update.name);
+    final ok = await saveToFile(currentTitle, currentText);
+    if (!ok) {
+      ZLog.e(_tag, "trySave file failed");
+      changeContentSaveState(FileSaveState.saved);
+      return;
     }
+
+    final data = currentFileData;
+    if (data == null) {
+      ZLog.e(_tag, "trySave file failed, data = null");
+      changeContentSaveState(FileSaveState.saved);
+      return;
+    }
+    final dbItem = data.fileItem;
+    if (dbItem == null) {
+      ZLog.e(_tag, "trySave file failed, dbItem = null");
+      changeContentSaveState(FileSaveState.saved);
+      return;
+    }
+
+    // 更新数据库。
+    data.content = currentText;
+
+    dbItem
+      ..title = currentTitle
+      ..filePath = file?.absolutePath
+      ..updateTime = DateTime.now().millisecondsSinceEpoch;
+
+    await _dataSource.insertOrUpdateOne(dbItem);
+
+    // 更新最后一次保存的内容
+    _lastSavedTitle = currentTitle;
+    _lastSavedContent = currentText;
+
+    EventManager.emit(FileChangeType.update.name);
 
     changeContentSaveState(FileSaveState.saved);
   }

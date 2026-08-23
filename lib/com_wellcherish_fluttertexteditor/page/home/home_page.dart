@@ -57,7 +57,15 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
         switch (viewModel.state) {
           case LoadState.completed:
             // 展示列表
-            return FileListView(fileDataList: viewModel.dataList);
+            return Container(
+              padding: EdgeInsets.only(
+                top: AppSpace.extraSmall,
+                bottom: AppSpace.medium,
+                left: AppSpace.medium,
+                right: AppSpace.medium,
+              ),
+              child: FileListView(fileDataList: viewModel.dataList),
+            );
           case LoadState.empty:
             return EmptyView();
           case LoadState.error:
@@ -73,7 +81,7 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
           onPressed: () {
             /// 进入创建文本文件的页面。
             if (mounted) {
-              context.goRouter.goNamed(RouteConstants.editor);
+              context.goRouter.pushNamed(RouteConstants.editor);
             }
           },
           shape: CircleBorder(),

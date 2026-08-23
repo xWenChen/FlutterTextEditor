@@ -4,6 +4,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/file_save_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/appbar/editor_app_bar.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/editor/ui/editor_view.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/router/app_router.dart';
 
 import '../../base/arch/base_view.dart';
 import '../../base/constants/material3/app_space.dart';
@@ -90,23 +91,29 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
     );
   }
 
-  Future<void> handleBack(bool didPop, Object? result) async {
+  Future<void> handleBack(bool canPop, Object? result) async {
     // 如果页面已经退出了（didPop 为 true），则不执行逻辑
-    if (didPop) return;
+    if (!canPop) return;
 
     // 执行保存操作
     await viewModel.trySave();
+
+    AppRouter.handleBack(context);
   }
 
   void onTitleChanged() {
     setState(() {
-      viewModel.changeContentSaveState(FileSaveState.unsaved);
+      if (!viewModel.titleSame(_titleController.text)) {
+        viewModel.changeContentSaveState(FileSaveState.unsaved);
+      }
     });
   }
 
   void onContentChanged() {
     setState(() {
-      viewModel.changeContentSaveState(FileSaveState.unsaved);
+      if (!viewModel.contentSame(_contentController.text)) {
+        viewModel.changeContentSaveState(FileSaveState.unsaved);
+      }
     });
   }
 

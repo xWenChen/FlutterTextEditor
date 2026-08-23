@@ -7,10 +7,11 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/l
 
 class FileManager {
   static final String _tag = "FileManager";
+  // 1. 私有化构造函数（防止外部通过 FileManager() 随意实例化）
+  FileManager._internal();
   // 单例
-  static final FileManager instance = FileManager();
+  static final FileManager instance = FileManager._internal();
   factory FileManager() => instance;
-  FileManager.internal();
 
   // 关键：为每个路径维护一个 Future，充当“任务队列”的尾巴
   final Map<String, Future<void>> _writeQueues = {};

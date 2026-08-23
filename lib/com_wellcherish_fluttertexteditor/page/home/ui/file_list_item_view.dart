@@ -24,14 +24,12 @@ class FileListItemViewState extends State<FileListItemView> {
     return GestureDetector(
       onTap: () {
         if (mounted) {
-          context.goRouter.goNamed(
+          context.goRouter.pushNamed(
             RouteConstants.editor,
             queryParameters: {
               RouteConstants.editorParamContentId: widget.fileData?.contentId,
             },
           );
-
-          context.goRouter.go;
         }
       },
       child: Column(
@@ -43,7 +41,7 @@ class FileListItemViewState extends State<FileListItemView> {
             widget.fileData?.title ?? Strings.noTitle,
             maxLines: AppConfig.listTitleLines,
             overflow: TextOverflow.ellipsis,
-            style: context.textTheme.titleMedium,
+            style: context.textTheme.titleLarge,
           ),
           // 正文
           Container(
@@ -52,7 +50,7 @@ class FileListItemViewState extends State<FileListItemView> {
               widget.fileData?.content ?? Strings.noText,
               maxLines: AppConfig.listTextLines,
               overflow: TextOverflow.ellipsis,
-              style: context.textTheme.bodyMedium,
+              style: context.textTheme.bodyLarge,
             ),
           ),
         ],

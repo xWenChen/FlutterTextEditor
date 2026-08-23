@@ -17,7 +17,7 @@ class AppRouter {
 
   /// 1. 创建全局唯一的 Router 实例
   static final GoRouter router = GoRouter(
-    initialLocation: RouteConstants.splash,
+    initialLocation: "${RouteConstants.schema}${RouteConstants.splash}",
     /// 3. 统一注册路由映射
     routes: [
       GoRoute(

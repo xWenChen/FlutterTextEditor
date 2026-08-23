@@ -27,18 +27,23 @@ const FileItemSchema = CollectionSchema(
       name: r'filePath',
       type: IsarType.string,
     ),
-    r'isDeleted': PropertySchema(
+    r'hashCode': PropertySchema(
       id: 2,
+      name: r'hashCode',
+      type: IsarType.long,
+    ),
+    r'isDeleted': PropertySchema(
+      id: 3,
       name: r'isDeleted',
       type: IsarType.bool,
     ),
     r'title': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'title',
       type: IsarType.string,
     ),
     r'updateTime': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'updateTime',
       type: IsarType.long,
     )
@@ -127,9 +132,10 @@ void _fileItemSerialize(
 ) {
   writer.writeString(offsets[0], object.contentId);
   writer.writeString(offsets[1], object.filePath);
-  writer.writeBool(offsets[2], object.isDeleted);
-  writer.writeString(offsets[3], object.title);
-  writer.writeLong(offsets[4], object.updateTime);
+  writer.writeLong(offsets[2], object.hashCode);
+  writer.writeBool(offsets[3], object.isDeleted);
+  writer.writeString(offsets[4], object.title);
+  writer.writeLong(offsets[5], object.updateTime);
 }
 
 FileItem _fileItemDeserialize(
@@ -141,9 +147,9 @@ FileItem _fileItemDeserialize(
   final object = FileItem(
     contentId: reader.readString(offsets[0]),
     filePath: reader.readStringOrNull(offsets[1]),
-    isDeleted: reader.readBoolOrNull(offsets[2]) ?? false,
-    title: reader.readStringOrNull(offsets[3]),
-    updateTime: reader.readLong(offsets[4]),
+    isDeleted: reader.readBoolOrNull(offsets[3]) ?? false,
+    title: reader.readStringOrNull(offsets[4]),
+    updateTime: reader.readLong(offsets[5]),
   );
   object.id = id;
   return object;
@@ -161,10 +167,12 @@ P _fileItemDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readLong(offset)) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 4:
+      return (reader.readStringOrNull(offset)) as P;
+    case 5:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -788,6 +796,59 @@ extension FileItemQueryFilter
     });
   }
 
+  QueryBuilder<FileItem, FileItem, QAfterFilterCondition> hashCodeEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FileItem, FileItem, QAfterFilterCondition> hashCodeGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FileItem, FileItem, QAfterFilterCondition> hashCodeLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hashCode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FileItem, FileItem, QAfterFilterCondition> hashCodeBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hashCode',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<FileItem, FileItem, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1081,6 +1142,18 @@ extension FileItemQuerySortBy on QueryBuilder<FileItem, FileItem, QSortBy> {
     });
   }
 
+  QueryBuilder<FileItem, FileItem, QAfterSortBy> sortByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FileItem, FileItem, QAfterSortBy> sortByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
   QueryBuilder<FileItem, FileItem, QAfterSortBy> sortByIsDeleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isDeleted', Sort.asc);
@@ -1141,6 +1214,18 @@ extension FileItemQuerySortThenBy
   QueryBuilder<FileItem, FileItem, QAfterSortBy> thenByFilePathDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'filePath', Sort.desc);
+    });
+  }
+
+  QueryBuilder<FileItem, FileItem, QAfterSortBy> thenByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FileItem, FileItem, QAfterSortBy> thenByHashCodeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hashCode', Sort.desc);
     });
   }
 
@@ -1209,6 +1294,12 @@ extension FileItemQueryWhereDistinct
     });
   }
 
+  QueryBuilder<FileItem, FileItem, QDistinct> distinctByHashCode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hashCode');
+    });
+  }
+
   QueryBuilder<FileItem, FileItem, QDistinct> distinctByIsDeleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isDeleted');
@@ -1246,6 +1337,12 @@ extension FileItemQueryProperty
   QueryBuilder<FileItem, String?, QQueryOperations> filePathProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'filePath');
+    });
+  }
+
+  QueryBuilder<FileItem, int, QQueryOperations> hashCodeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hashCode');
     });
   }
 
