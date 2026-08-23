@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/file_change_type.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/material3/app_size.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/material3/app_space.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/state_widget/empty_view.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/state_widget/loading_view.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/utils/EventManager.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/home/home_view_model.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/home/ui/file_list_view.dart';
 
@@ -22,10 +24,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends BaseState<HomeViewModel, HomePage> {
+
+  late final AppLifecycleListener _lifecycleListener;
+  bool _isResumed = true; // 记录 App 是否在前台，在前台才刷新页面。
+  bool _needRefresh = false; // 记录后台期间是否有新通知
+  late final updateCallback = _listenUpdateEvent;
+  late final insertCallback =_listenUpdateEvent;
+
+
   @override
   void createViewModel() {
     viewModel =  HomeViewModel();
     viewModel.load();
+    _listenDataChanged();
+  }
+
+  @override
+  void dispose() {
+    _lifecycleListener.dispose();
+    EventManager.unregister(FileChangeType.update.name, updateCallback);
+    EventManager.unregister(FileChangeType.added.name, insertCallback);
+    super.dispose();
   }
 
   @override
@@ -65,5 +84,40 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
         ),
       ),
     );
+  }
+
+  void _listenDataChanged() {
+    _lifecycleListener = AppLifecycleListener(
+      onResume: () {
+        _isResumed = true;
+        // 回到前台时，如果后台期间有新通知，补做一次刷新
+        if (_needRefresh) {
+          _needRefresh = false;
+          viewModel.load();
+        }
+      },
+      onPause: () {
+        _isResumed = false;
+      },
+    );
+
+    // 2. 监听全局通知/事件
+    EventManager.register(FileChangeType.update.name, updateCallback);
+    EventManager.register(FileChangeType.added.name, insertCallback);
+  }
+
+  bool _listenUpdateEvent(String type) {
+    if (type == FileChangeType.unknown) {
+      return false;
+    }
+    if (_isResumed) {
+      // 在前台：直接加载数据
+      viewModel.load();
+      _needRefresh = false;
+    } else {
+      // 在后台：只标记，不进行任何网络/UI请求
+      _needRefresh = true;
+    }
+    return true;
   }
 }

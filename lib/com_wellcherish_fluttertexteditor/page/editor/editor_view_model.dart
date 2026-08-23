@@ -6,6 +6,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/config/app_config.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/bean/file_item.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/file_extension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/utils/EventManager.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
 
 import '../../base/bean/file_data.dart';
@@ -21,7 +22,6 @@ class EditorViewModel extends BaseViewModel {
   final _dataSource = FileDataSource();
 
   FileSaveState saveState = FileSaveState.saved;
-  FileChangeType fileChangeType = FileChangeType.unknown;
 
   FileData? currentFileData;
 
@@ -96,7 +96,6 @@ class EditorViewModel extends BaseViewModel {
     super.dispose();
     _timer?.cancel();
     currentFileData = null;
-    fileChangeType = FileChangeType.unknown;
   }
 
   /// 更新保存状态并通知 UI
@@ -156,6 +155,8 @@ class EditorViewModel extends BaseViewModel {
       // 更新最后一次保存的内容
       _lastSavedTitle = currentTitle;
       _lastSavedContent = currentText;
+
+      EventManager.emit(FileChangeType.update.name);
     }
 
     changeContentSaveState(FileSaveState.saved);
