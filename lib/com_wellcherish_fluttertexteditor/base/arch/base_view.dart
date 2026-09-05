@@ -32,20 +32,22 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
 class _BaseViewState extends State<BaseView> {
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: widget.canPop,
-      onPopInvokedWithResult: widget.onPopInvokedWithResult,
-      child: Scaffold(
-        appBar: widget.appBar ?? EditorAppBar(),
-        body: ListenableBuilder(
-          listenable: widget.viewModel,
-          builder: widget.builder,
-        ),
-        // 默认就是这个位置，间距为 16
-        floatingActionButtonLocation: CustomFabLocation(),
-        floatingActionButton: widget.floatingActionButton,
-        backgroundColor: context.appBackground,
-      ),
+    // 整个 Scaffold 监听 viewModel，保证 appBar、floatingActionButton 和 body 都能实时响应通知
+    return ListenableBuilder(
+      listenable: widget.viewModel,
+      builder: (context, child) {
+        return PopScope(
+          canPop: widget.canPop,
+          onPopInvokedWithResult: widget.onPopInvokedWithResult,
+          child: Scaffold(
+            appBar: widget.appBar ?? EditorAppBar(),
+            body: widget.builder(context, child),
+            floatingActionButtonLocation: CustomFabLocation(),
+            floatingActionButton: widget.floatingActionButton,
+            backgroundColor: context.appBackground,
+          ),
+        );
+      },
     );
   }
 }
@@ -60,7 +62,7 @@ class CustomFabLocation extends FloatingActionButtonLocation {
     final double x = pageSize.width - buttonSize.width - AppSpace.extraLarge; // 距离右边 32
 
     // 屏幕高度 - FAB高度 - 期望的下边距
-    final double y = pageSize.height - buttonSize.height - AppSpace.doubleExtraLarge; // 距离底部 64
+    final double y = pageSize.height - buttonSize.height - AppSpace.large80; // 距离底部 64
 
     // FloatingActionButton 左上角的坐标。
     return Offset(x, y);

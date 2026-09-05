@@ -15,4 +15,5 @@ class Strings {
   static const String saveFail = "保存失败";
   static const String noTitle = "暂无标题";
   static const String noText = "暂无文本";
+  static const String pressToExitApp = "再按一次退出";
 }

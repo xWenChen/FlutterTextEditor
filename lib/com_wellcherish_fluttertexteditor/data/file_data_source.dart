@@ -1,6 +1,7 @@
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/file_item_database.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/file/editor_file_utils.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/file/file_manager.dart';
 
 import '../base/database/bean/file_item.dart';
 
@@ -50,5 +51,12 @@ class FileDataSource {
     data.content = EditorFileUtils.splitTitleAndText(fileText).$2;
 
     return data;
+  }
+
+  Future<bool> deleteSelectedItems(List<FileData> dataList) async {
+    dataList.forEach((data) {
+      FileManager.instance.tryDeleteFileByPath(data.fileItem?.filePath);
+    });
+    return await _dao.deleteAllByContentId(dataList.map((data) => data.contentId ?? "").toList()) > 0;
   }
 }

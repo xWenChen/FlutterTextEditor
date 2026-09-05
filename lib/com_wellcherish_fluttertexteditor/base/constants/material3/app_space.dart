@@ -7,4 +7,5 @@ class AppSpace {
   static const double extraLarge = 32.0;
   static const double doubleLarge = 48.0;
   static const double doubleExtraLarge = 64.0;
+  static const double large80 = 80.0;
 }

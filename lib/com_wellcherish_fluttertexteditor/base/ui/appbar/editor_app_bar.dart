@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/router/app_router.dart';
 import '../../../resource/sizes.dart';
@@ -10,8 +9,9 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final Widget? title;
   final bool centerTitle;
-  final List<Widget>? actions;
+  final List<Widget>? Function()? actions;
   final Future<void> Function()? handleBack;
+  final Listenable? listenable;
 
   const EditorAppBar({
     super.key,
@@ -20,7 +20,51 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = false,
     this.actions,
     this.handleBack,
+    this.listenable,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return listenable == null ? _AppBar(
+        leading: leading,
+        handleBack: handleBack,
+        title: title,
+        centerTitle: centerTitle,
+        actions: actions?.call(),
+    ) : ListenableBuilder(
+        listenable: listenable!,
+        builder: (context, child) {
+          return _AppBar(
+              leading: leading,
+              handleBack: handleBack,
+              title: title,
+              centerTitle: centerTitle,
+              actions: actions?.call()
+          );
+        },
+    );
+  }
+
+  /// 必须重写这个 get 方法，告诉系统高度。kToolbarHeight 是 Flutter 定义的默认导航栏高度（通常是 56.0）
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class _AppBar extends StatelessWidget {
+  const _AppBar({
+    super.key,
+    required this.leading,
+    required this.handleBack,
+    required this.title,
+    required this.centerTitle,
+    required this.actions,
+  });
+
+  final Widget? leading;
+  final Future<void> Function()? handleBack;
+  final Widget? title;
+  final bool centerTitle;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +97,4 @@ class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
       scrolledUnderElevation: 0,            // 禁用滚动时的阴影/深度效果
     );
   }
-
-  /// 必须重写这个 get 方法，告诉系统高度。kToolbarHeight 是 Flutter 定义的默认导航栏高度（通常是 56.0）
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
