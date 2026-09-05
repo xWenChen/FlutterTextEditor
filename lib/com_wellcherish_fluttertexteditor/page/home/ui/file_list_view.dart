@@ -5,10 +5,16 @@ import 'file_list_item_view.dart';
 
 class FileListView extends StatefulWidget {
   final List<FileData> fileDataList;
+  final bool isSelectionMode;
+  final ListItemTapCallback? onItemTap;
+  final ListItemTapCallback? onItemLongPress;
 
   FileListView({
     super.key,
     required this.fileDataList,
+    this.isSelectionMode = false,
+    this.onItemTap,
+    this.onItemLongPress,
   });
 
   @override
@@ -19,21 +25,19 @@ class FileListViewState extends State<FileListView> {
   @override
   Widget build(BuildContext context) {
     final list = widget.fileDataList;
+    final isSelectionMode = widget.isSelectionMode;
     return ListView.separated(
       itemBuilder: (context, index) {
         var data = list[index];
         return FileListItemView(
-          key: ObjectKey(data),
+          index: index,
           fileData: data,
+          isSelectionMode: isSelectionMode,
+          onTap: widget.onItemTap,
+          onLongPress: widget.onItemLongPress,
         );
       },
-      separatorBuilder: (context, index) {
-        if (index == list.length - 1) {
-          return SizedBox.shrink();
-        } else {
-          return Divider();
-        }
-      },
+      separatorBuilder: (context, index) => const Divider(),
       itemCount: list.length,
     );
   }

@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +16,7 @@ class AppRouter {
 
   /// 1. 创建全局唯一的 Router 实例
   static final GoRouter router = GoRouter(
-    initialLocation: "${RouteConstants.schema}${RouteConstants.splash}",
+    initialLocation: "${RouteConstants.schema}${RouteConstants.home}",
     /// 3. 统一注册路由映射
     routes: [
       GoRoute(
@@ -28,7 +27,10 @@ class AppRouter {
       GoRoute(
         name: RouteConstants.home,
         path: "${RouteConstants.schema}${RouteConstants.home}",
-        builder: (context, state) => const HomePage(),
+        pageBuilder: (context, state) => const NoTransitionPage(
+          // 👈 禁用转场动画
+          child: const HomePage(),
+        ),
       ),
       GoRoute(
         name: RouteConstants.editor,
@@ -86,9 +88,14 @@ class AppRouter {
 
   /// 处理返回按钮
   static Future<void> handleBack(BuildContext context) async {
-    final router = GoRouter.of(context);
+    // 1. 优先触发 Navigator 的 Pop 尝试（会优先走 PopScope 拦截逻辑）
+    final didPop = await Navigator.maybePop(context);
 
-    // 1. 判断是否可以返回 (GoRouter 的判断方式)
+    // 2. 如果已成功触发 PopScope 逻辑，或页面已被普通 Pop 弹出，直接返回
+    if (didPop) return;
+
+    // 3. 判断是否可以返回 (GoRouter 的判断方式)
+    final router = GoRouter.of(context);
     if (router.canPop()) {
       // 直接返回上一页
       router.pop();

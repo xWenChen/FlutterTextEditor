@@ -72,4 +72,12 @@ class FileItemDao {
   Future<int> deleteAll(List<int> ids) async {
     return await isar.writeTxn(() => isar.fileItems.deleteAll(ids));
   }
+
+  /// 11. 批量删除
+  Future<int> deleteAllByContentId(List<String>? contentIdList) async {
+    if (contentIdList == null || contentIdList.isEmpty) {
+      return 0;
+    }
+    return await isar.writeTxn(() => isar.fileItems.deleteAllByContentId(contentIdList));
+  }
 }

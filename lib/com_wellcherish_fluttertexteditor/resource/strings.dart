@@ -1,7 +1,7 @@
 /// 字符串资源
 class Strings {
   static const String appName = "文本编辑器";
-  static const String noData = "暂无数据";
+  static const String noData = "暂无数据，点击\"+\"创建新文本。";
   static const String dataLoading = "数据加载中";
   static const String dataError = "数据加载出错!";
   static const String appInitializing = "应用初始化中";
@@ -15,4 +15,9 @@ class Strings {
   static const String saveFail = "保存失败";
   static const String noTitle = "暂无标题";
   static const String noText = "暂无文本";
+  static const String pressToExitApp = "再按一次退出";
+  static const String tips = "提示";
+  static const String deleteSelectedContent = "是否删除选中的内容?";
+  static const String cancel = "取消";
+  static const String delete = "删除";
 }
