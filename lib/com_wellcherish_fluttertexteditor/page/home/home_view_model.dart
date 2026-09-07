@@ -36,7 +36,7 @@ class HomeViewModel extends BaseViewModel {
       updateAppInitState(LoadState.loading);
       final existData = await _loadFromDb();
       if (existData) {
-        // 关键：等待当前帧结束后，再触发状态变更，让 Flutter 有喘息和准备的时间
+        // 关键：等待当前帧结束后，再触发状态变更，让 Flutter 有喘息和准备的时间。避免刷新冲突，页面出现闪烁。
         WidgetsBinding.instance.addPostFrameCallback((_) {
           updateAppInitState(LoadState.completed);
         });
