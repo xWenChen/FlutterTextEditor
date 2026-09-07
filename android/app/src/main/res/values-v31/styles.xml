@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <!-- Show a splash screen on the activity. Automatically removed when
+             the Flutter engine draws its first frame -->
+        <item name="android:windowBackground">@drawable/launch_background</item>
+
+        <!-- 1. 将启动页背景色设为与你 App 首页一致的颜色（例如黑色或纯白） -->
+        <item name="android:windowSplashScreenBackground">@android:color/white</item>
+        <!-- 2. 将启动页图标替换为一个透明图标（隐藏中间的 App Icon） -->
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+    </style>
+</resources>
