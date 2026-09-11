@@ -12,7 +12,7 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
   final EditorAppBar? appBar;
   final Widget? floatingActionButton;
   // canPop=false时，用户需要点击两次返回按钮，才能退出应用。
-  final bool canPop;
+  final bool Function()? canPop;
   final PopInvokedWithResultCallback? onPopInvokedWithResult;
 
   const BaseView({
@@ -21,7 +21,7 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
     required this.builder,
     this.appBar,
     this.floatingActionButton,
-    this.canPop = true,
+    this.canPop,
     this.onPopInvokedWithResult,
   });
 
@@ -37,7 +37,7 @@ class _BaseViewState extends State<BaseView> {
       listenable: widget.viewModel,
       builder: (context, child) {
         return PopScope(
-          canPop: widget.canPop,
+          canPop: widget.canPop?.call() ?? true,
           onPopInvokedWithResult: widget.onPopInvokedWithResult,
           child: Scaffold(
             appBar: widget.appBar ?? EditorAppBar(),

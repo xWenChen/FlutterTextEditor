@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_state.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/file_save_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/ui/appbar/editor_app_bar.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/editor/ui/editor_view.dart';
@@ -66,7 +65,7 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
   Widget build(BuildContext context) {
     return BaseView(
       viewModel: viewModel,
-      canPop: viewModel.canPop,
+      canPop: () => viewModel.canPop,
       onPopInvokedWithResult: handleBack,
       appBar: EditorAppBar(
         handleBack: () async {
