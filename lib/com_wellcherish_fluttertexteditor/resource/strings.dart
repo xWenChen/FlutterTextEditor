@@ -18,6 +18,8 @@ class Strings {
   static const String pressToExitApp = "再按一次退出";
   static const String tips = "提示";
   static const String deleteSelectedContent = "是否删除选中的内容?";
+  static const String deleteAllText = "是否删除标题和全部内容?";
   static const String cancel = "取消";
   static const String delete = "删除";
+  static const String confirm = "确定";
 }

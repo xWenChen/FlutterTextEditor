@@ -49,7 +49,6 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
     // 监听文本变化，实时刷新 UI 上的叉号。
     _titleController.addListener(onTitleChanged);
     _contentController.addListener(onContentChanged);
-
   }
 
   @override

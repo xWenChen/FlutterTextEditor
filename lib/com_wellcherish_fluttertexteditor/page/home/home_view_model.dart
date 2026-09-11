@@ -6,6 +6,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/file_item_database.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/utils/dialog_utils.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/resource/strings.dart';
 import 'package:go_router/go_router.dart';
@@ -79,62 +80,11 @@ class HomeViewModel extends BaseViewModel {
   }
 
   Future<bool> tryDeleteSelectedItems(BuildContext context) async {
-    // context.push<bool> 或 showDialog 都可以配合 context.pop(result) 接收返回值
-    final bool? isConfirmed = await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Strings.tips,
-            style: context.textTheme.titleMedium?.merge(
-              TextStyle(color: context.colorScheme.onPrimaryContainer),
-            ),
-          ),
-          content: Text(
-            Strings.deleteSelectedContent,
-            style: context.textTheme.bodyMedium?.merge(
-              TextStyle(color: context.colorScheme.onPrimaryContainer),
-            ),
-          ),
-          actionsPadding: EdgeInsets.zero,
-          actions: <Widget>[
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    style: FilledButton.styleFrom(
-                      foregroundColor: context.colorScheme.onPrimaryContainer,
-                    ),
-                    onPressed: () => context.pop(false),
-                    child: const Text(Strings.cancel),
-                  ),
-                ),
-                VerticalDivider(
-                  width: 1,
-                  color: context.colorScheme.outline,
-                ),
-                Expanded(
-                  child: TextButton(
-                    style: FilledButton.styleFrom(
-                      foregroundColor: context.colorScheme.error,
-                    ),
-                    onPressed: () => context.pop(true),
-                    child: const Text(Strings.delete),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
+    return await DialogUtils.showConfirmDialog(
+      context,
+      confirmText: Strings.delete,
+      onConfirmTap: () async => await deleteSelectedItems(),
     );
-
-    // 根据返回的异步结果处理后续逻辑
-    if (isConfirmed == true) {
-      return await deleteSelectedItems();
-    }
-    return false;
   }
 
   /// 删除选中项：通过 where/toList 创建新集合

@@ -4,6 +4,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/const
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/file_save_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/utils/dialog_utils.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/editor/ui/editor_text_field.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/editor/ui/editor_text_state_tips.dart';
 
@@ -82,8 +83,17 @@ class _EditorViewState extends State<EditorView> {
         // 状态提示
         EditorTextStateTips(
           saveState: widget.saveState,
-          onClearText: _contentController.text.isNullOrEmpty ? null : () {
-            _contentController.clear();
+          onClearText: _contentController.text.isNullOrEmpty ? null : () async {
+            await DialogUtils.showConfirmDialog(
+              context,
+              content: Strings.deleteAllText,
+              confirmText: Strings.delete,
+              onConfirmTap: () async {
+                _titleController.clear();
+                _contentController.clear();
+                return true;
+              },
+            );
           },
           topEnable: !_isAtTop,
           bottomEnable: !_isAtBottom,
