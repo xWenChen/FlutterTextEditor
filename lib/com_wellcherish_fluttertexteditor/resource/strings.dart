@@ -22,4 +22,7 @@ class Strings {
   static const String cancel = "取消";
   static const String delete = "删除";
   static const String confirm = "确定";
+  /// 设置页的Item
+  static const String dataSyncTitle = "数据搬家";
+  static const String dataSyncDesc = "将当前应用内的文档搬到其他设备上。";
 }

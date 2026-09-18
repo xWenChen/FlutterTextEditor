@@ -12,5 +12,5 @@ class RouteConstants {
   static const String editor = "editor";
   static const String editorParamContentId = "contentId";
   /// 设置页
-  static const String settings = "setting";
+  static const String settings = "settings";
 }
