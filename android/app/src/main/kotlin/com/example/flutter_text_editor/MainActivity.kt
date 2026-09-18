@@ -15,6 +15,12 @@ class MainActivity : FlutterActivity() {
         DataSyncMethodChannel.register(flutterEngine)
     }
 
+    override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        super.cleanUpFlutterEngine(flutterEngine)
+        DataSyncWifiP2pManager.getActivity = { null }
+        DataSyncMethodChannel.unregister(flutterEngine)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String?>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         DataSyncWifiP2pManager.onRequestPermissionsResult(requestCode, permissions, grantResults)

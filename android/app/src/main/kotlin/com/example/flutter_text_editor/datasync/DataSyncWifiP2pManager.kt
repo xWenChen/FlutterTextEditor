@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import com.example.flutter_text_editor.MainActivity
 import com.example.flutter_text_editor.MainApplication
 import io.flutter.embedding.android.FlutterActivity
+import org.json.JSONObject
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -105,8 +106,8 @@ object DataSyncWifiP2pManager {
     fun release() {
         wifiP2pManager = null
         wifiP2pChannel = null
+        deviceMap.clear()
         unregisterReceiver()
-        getActivity = { null }
     }
 
     @AccessedByFlutter
@@ -210,12 +211,15 @@ object DataSyncWifiP2pManager {
                 deviceMap[device.deviceAddress] = device
             }
         }
+
+        DataSyncMethodChannel.updateDeviceMap(deviceMap)
     }
 
     @SuppressLint("NewApi")
     fun updateThisDevice(device: WifiP2pDevice?) {
         device ?: return
         deviceMap[device.deviceAddress] = device
+        DataSyncMethodChannel.updateDeviceMap(deviceMap)
     }
 
     @SuppressLint("NewApi")

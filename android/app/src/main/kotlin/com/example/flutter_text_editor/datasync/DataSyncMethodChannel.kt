@@ -1,17 +1,29 @@
 package com.example.flutter_text_editor.datasync
 
+import android.R.attr.name
+import android.annotation.SuppressLint
+import android.net.wifi.p2p.WifiP2pDevice
+import com.example.flutter_text_editor.datasync.DataSyncWifiP2pManager.deviceStatusDesc
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import org.json.JSONObject
 
 object DataSyncMethodChannel {
     private const val channelName = "com.wellcherish.flutter.texteditor/datasync"
 
+    private var channel: MethodChannel? = null
+
     fun register(flutterEngine: FlutterEngine) {
-        MethodChannel(
+        channel = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             channelName
-        ).setMethodCallHandler { call, result ->
+        )
+        channel?.setMethodCallHandler { call, result ->
             when(call.method) {
+                "init" -> {
+                    DataSyncWifiP2pManager.init()
+                    result.success(true)
+                }
                 "getDetails" -> {
                     val deviceAddress = call.argument<String>("deviceAddress")
                     val detail = DataSyncWifiP2pManager.getDetails(deviceAddress)
@@ -45,5 +57,24 @@ object DataSyncMethodChannel {
                 }
             }
         }
+    }
+
+    fun unregister(flutterEngine: FlutterEngine) {
+        channel?.setMethodCallHandler(null)
+    }
+
+    @SuppressLint("NewApi")
+    fun updateDeviceMap(deviceMap: Map<String, WifiP2pDevice>) {
+        val resultMap = mutableMapOf<String, String>()
+
+        for ((address, device) in deviceMap) {
+            // 构建内层的 JSON 对象
+            resultMap[address] = JSONObject().apply {
+                put("deviceName", device.deviceAddress)
+                put("deviceAddress", device.deviceAddress)
+                put("deviceStatusDesc", device.deviceStatusDesc())
+            }.toString()
+        }
+        channel?.invokeMethod("updateDeviceMap", resultMap)
     }
 }
