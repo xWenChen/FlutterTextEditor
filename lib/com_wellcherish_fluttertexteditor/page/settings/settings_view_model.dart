@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view_model.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/mutable_state.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/data/settings_item.dart';
@@ -16,11 +17,13 @@ class SettingsViewModel extends BaseViewModel {
       name: Strings.dataSyncTitle,
       desc: Strings.dataSyncDesc,
       pageRouteName: RouteConstants.settings,
+      iconData: Icons.phonelink_rounded
     ),
     SettingsItem(
       type: SettingsType.about,
       name: Strings.aboutTitle,
       pageRouteName: RouteConstants.settings,
+      iconData: Icons.info_outline_rounded
     ),
   ]);
 

@@ -1,4 +1,6 @@
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/data/settings_type.dart';
 
 class SettingsItem {
@@ -6,12 +8,14 @@ class SettingsItem {
   String name;
   String desc;
   String pageRouteName;
+  IconData iconData;
 
   SettingsItem({
     this.type = SettingsType.unknown,
     this.name = '',
     this.desc = '',
     this.pageRouteName = '',
+    this.iconData = Icons.question_mark_rounded,
   });
 
   @override

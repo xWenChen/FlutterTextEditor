@@ -47,9 +47,8 @@ class _StateViewState extends State<StateView> {
           ),
           Text(
             widget.text,
-            style: context.textTheme.titleLarge?.copyWith(
+            style: context.textTheme.bodyLarge?.copyWith(
               color: context.colorScheme.secondary,
-
             ),
           ),
           /// 上顶100，使文本居中。
