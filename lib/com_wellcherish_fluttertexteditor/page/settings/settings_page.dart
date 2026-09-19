@@ -78,7 +78,7 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
                 trailing: Icon(Icons.keyboard_arrow_right_rounded),
                 contentPadding: EdgeInsets.symmetric(vertical: 0),
                 dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
-                visualDensity: VisualDensity(vertical: -4), // 2. 将垂直方向的密度压到极致（范围 -4 到 4）
+                visualDensity: VisualDensity(vertical: -AppSpace.extraSmall), // 2. 将垂直方向的密度压到极致（范围 -4 到 4）
               );
             },
             separatorBuilder: (context, index) => const Divider(),
