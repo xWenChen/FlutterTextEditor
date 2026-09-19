@@ -47,7 +47,7 @@ class _StateViewState extends State<StateView> {
           ),
           Text(
             widget.text,
-            style: context.textTheme.bodyLarge?.copyWith(
+            style: context.textTheme.titleMedium?.copyWith(
               color: context.colorScheme.secondary,
             ),
           ),
