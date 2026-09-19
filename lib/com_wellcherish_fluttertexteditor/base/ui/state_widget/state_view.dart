@@ -28,6 +28,7 @@ class _StateViewState extends State<StateView> {
     var size = widget.size;
     return Container(
       alignment: Alignment.center,
+      color: context.appBackground,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,7 +40,7 @@ class _StateViewState extends State<StateView> {
             padding: const EdgeInsets.only(bottom: AppSpace.medium),
             child: ColorFiltered(
               colorFilter: ColorFilter.mode(
-                context.colorScheme.primary,
+                context.contentColor,
                 BlendMode.srcIn,
               ),
               child: widget.icon,
@@ -48,7 +49,7 @@ class _StateViewState extends State<StateView> {
           Text(
             widget.text,
             style: context.textTheme.titleMedium?.copyWith(
-              color: context.colorScheme.secondary,
+              color: context.contentColor,
             ),
           ),
           /// 上顶100，使文本居中。

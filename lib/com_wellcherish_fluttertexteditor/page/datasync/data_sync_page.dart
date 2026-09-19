@@ -1,37 +1,30 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/data/settings_item.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_view_model.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/feature/data_sync_wifi_p2p_device.dart';
 
 import '../../base/arch/base_state.dart';
 import '../../base/constants/material3/app_space.dart';
 import '../../base/extension/build_context_extension.dart';
 import '../../base/ui/appbar/editor_app_bar.dart';
-import '../../resource/strings.dart';
 import '../../router/app_router.dart';
+import 'data_sync_view_model.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+/*
+class DataSyncPage extends StatefulWidget {
+  const DataSyncPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<DataSyncPage> createState() => _DataSyncPageState();
 }
 
-class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
+class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
 
   @override
   void createViewModel() {
-    viewModel =  SettingsViewModel();
+    viewModel =  DataSyncViewModel();
 
-    // 注册帧末尾回调
-    /*WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-
-      // 当前帧渲染完成后，安全地调用 setState 刷新下一帧
-      viewModel.tryUpdate();
-    });*/
+    viewModel.init();
   }
 
   @override
@@ -39,7 +32,6 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
     return BaseView(
       viewModel: viewModel,
       appBar: EditorAppBar(
-        title: Strings.settingsTitle,
         handleBack: () async {
           AppRouter.handleBack(context);
         },
@@ -54,7 +46,6 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
             left: AppSpace.medium,
             right: AppSpace.medium,
           ),
-          color: context.appBackground,
           child: ListView.separated(
             itemBuilder: (context, index) {
               var data = list[index];
@@ -65,10 +56,8 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
                   }
                 },
                 title: Text(
-                  data.name,
-                  style: context.textTheme.titleMedium?.merge(TextStyle(
-                    color: context.contentColor,
-                  )),
+                  data.deviceName,
+                  style: context.textTheme.titleMedium,
                 ),
                 subtitle: !data.desc.isNullOrEmpty ? Container(
                   padding: EdgeInsets.only(top: AppSpace.extraSmall),
@@ -76,19 +65,11 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
                     data.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.bodySmall?.merge(TextStyle(
-                      color: context.contentColor,
-                    )),
+                    style: context.textTheme.bodySmall,
                   ),
                 ) : null,
-                leading: Icon(
-                  data.iconData,
-                  color: context.contentColor,
-                ),
-                trailing: Icon(
-                  Icons.keyboard_arrow_right_rounded,
-                  color: context.contentColor,
-                ),
+                leading: Icon(data.iconData),
+                trailing: Icon(Icons.keyboard_arrow_right_rounded),
                 contentPadding: EdgeInsets.symmetric(vertical: 0),
                 dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
                 visualDensity: VisualDensity(vertical: -AppSpace.extraSmall), // 2. 将垂直方向的密度压到极致（范围 -4 到 4）
@@ -102,11 +83,11 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
     );
   }
 
-  Future<void> onItemTap(SettingsItem? settingsItem, int index) async {
-    if (settingsItem == null) {
+  Future<void> onItemTap(DataSyncWifiP2pDevice? data, int index) async {
+    if (data == null) {
       return;
     }
-    /// 非选择模式，跳转页面。
-    await context.goRouter.pushNamed(settingsItem.pageRouteName);
+    /// todo 响应点击操作
+
   }
-}
+}*/

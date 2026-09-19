@@ -15,7 +15,7 @@ class AppBarSettingsItem extends StatelessWidget {
       iconSize: Sizes.appbarIcon,
       icon: Icon(
         Icons.settings_rounded,
-        color: context.colorScheme.onPrimaryContainer,
+        color: context.contentColor,
       ),
       onPressed: () => AppRouter.goSettingsPage(context),
     );

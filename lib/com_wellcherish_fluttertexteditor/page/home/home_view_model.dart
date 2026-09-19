@@ -149,12 +149,12 @@ class HomeViewModel extends BaseViewModel {
             Strings.pressToExitApp,
             style: context.textTheme.titleMedium?.merge(
               TextStyle(
-                color: context.colorScheme.onPrimaryContainer,
+                color: context.widgetBackground,
               ),
             ),
           ),
           duration: Duration(seconds: 2),
-          backgroundColor: context.colorScheme.primaryContainer,
+          backgroundColor: context.contentColor,
         ),
       );
       return;

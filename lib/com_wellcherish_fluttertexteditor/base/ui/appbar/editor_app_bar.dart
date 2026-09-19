@@ -7,7 +7,7 @@ import 'appbar_settings_item.dart';
 
 class EditorAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
-  final Widget? title;
+  final String? title;
   final bool centerTitle;
   final List<Widget>? Function()? actions;
   final Future<void> Function()? handleBack;
@@ -62,27 +62,28 @@ class _AppBar extends StatelessWidget {
 
   final Widget? leading;
   final Future<void> Function()? handleBack;
-  final Widget? title;
+  final String? title;
   final bool centerTitle;
   final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: context.colorScheme.primaryContainer,
+      backgroundColor: context.appBackground,
       leading: leading ?? IconButton(
         iconSize: Sizes.appbarIcon,
         icon: Icon(
           Icons.arrow_back_rounded,
-          color: context.colorScheme.onPrimaryContainer,
+          color: context.contentColor,
         ),
         onPressed: handleBack ?? () async => AppRouter.handleBack(context),
       ),
-      title: title ?? Text(
-        Strings.appName,
+      title: Text(
+        title ?? Strings.appName,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: context.colorScheme.onPrimaryContainer,
+          color: context.contentColor,
+          fontWeight: FontWeight.w500,
         ),
       ),
       centerTitle: centerTitle,

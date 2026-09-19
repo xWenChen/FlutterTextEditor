@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
+
+import '../../base/ui/appbar/editor_app_bar.dart';
+import '../../resource/strings.dart';
+import '../../router/app_router.dart';
 
 /// Flutter code sample for [ColorScheme].
 
@@ -40,15 +45,18 @@ class _ColorSchemeExampleState extends State<ColorSchemeExample> {
         ),
       ),
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('ColorScheme'),
-          actions: <Widget>[
+        appBar: EditorAppBar(
+          title: Strings.colorsTitle,
+          handleBack: () async {
+            AppRouter.handleBack(context);
+          },
+          actions: () => <Widget>[
             SettingsButton(
               selectedColor: selectedColor,
               selectedBrightness: selectedBrightness,
               selectedContrast: selectedContrast,
               updateTheme: updateTheme,
-            ),
+            )
           ],
         ),
         body: SingleChildScrollView(
@@ -76,6 +84,7 @@ class _ColorSchemeExampleState extends State<ColorSchemeExample> {
             ),
           ),
         ),
+        backgroundColor: context.appBackground,
       ),
     );
   }
@@ -535,7 +544,8 @@ class ColorChip extends StatelessWidget {
 }
 
 enum ColorSeed {
-  baseColor('M3 Baseline', Color(0xff6750a4)),
+  baseColor('M3 Baseline', Colors.lightGreen),
+  basePurple('purple', Color(0xff6750a4)),
   indigo('Indigo', Colors.indigo),
   blue('Blue', Colors.blue),
   teal('Teal', Colors.teal),
@@ -572,7 +582,10 @@ class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.settings),
+      icon: Icon(
+        Icons.settings,
+        color: context.contentColor,
+      ),
       onPressed: () {
         showModalBottomSheet<void>(
           barrierColor: Colors.transparent,

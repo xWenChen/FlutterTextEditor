@@ -73,7 +73,7 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
                 iconSize: Sizes.appbarIcon,
                 icon: Icon(
                   Icons.delete_forever_rounded,
-                  color: context.colorScheme.onPrimaryContainer,
+                  color: context.contentColor,
                 ),
                 onPressed: () async => viewModel.tryDeleteSelectedItems(context),
               ),
@@ -135,6 +135,8 @@ class _HomePageState extends BaseState<HomeViewModel, HomePage> {
               Icons.add_rounded,
               size: addIconSize,
             ),
+            backgroundColor: context.contentColor,
+            foregroundColor: context.widgetBackground,
           ),
         ),
         backgroundColor: context.appBackground,
