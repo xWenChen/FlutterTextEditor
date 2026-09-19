@@ -17,7 +17,7 @@ class AppBarSettingsItem extends StatelessWidget {
         Icons.settings_rounded,
         color: context.colorScheme.onPrimaryContainer,
       ),
-      onPressed: ()  => AppRouter.goSettingsPage(context),
+      onPressed: () => AppRouter.goSettingsPage(context),
     );
   }
 }

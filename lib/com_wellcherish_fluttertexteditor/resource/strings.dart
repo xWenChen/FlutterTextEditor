@@ -25,4 +25,6 @@ class Strings {
   /// 设置页的Item
   static const String dataSyncTitle = "数据搬家";
   static const String dataSyncDesc = "将当前应用内的文档搬到其他设备上。";
+  /// 关于页的Item
+  static const String aboutTitle = "关于";
 }

@@ -3,7 +3,9 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_page.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,15 +49,13 @@ class AppRouter {
           );
         },
       ),
-      /*// 带参数的路由, :id是占位符
       GoRoute(
-        path: '${AppRoutes.setting}/:id',
+        name: RouteConstants.settings,
+        path: "${RouteConstants.schema}${RouteConstants.settings}",
         builder: (context, state) {
-          final id = state.pathParameters['id']!; // 获取路径参数
-          final extraData = state.extra as Map?; // 获取复杂对象参数
-          return DetailPage(id: id, extra: extraData);
+          return SettingsPage();
         },
-      ),*/
+      ),
     ],
 
     /// 4. 全局重定向（路由守卫）
@@ -109,6 +109,6 @@ class AppRouter {
   /// 跳转设置页
   static Future<void> goSettingsPage(BuildContext context) async {
     ZLog.d(_tag, "go settings page!");
-    await GoRouter.of(context).push(RouteConstants.settings);
+    await context.goRouter.pushNamed(RouteConstants.settings);
   }
 }

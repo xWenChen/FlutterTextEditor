@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_item.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/data/settings_item.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_view_model.dart';
 
 import '../../base/arch/base_state.dart';
@@ -18,7 +19,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
-
 
   @override
   void createViewModel() {
@@ -65,15 +65,15 @@ class _SettingsPageState extends BaseState<SettingsViewModel, SettingsPage> {
                   data.name,
                   style: context.textTheme.titleLarge,
                 ),
-                subtitle: Container(
+                subtitle: !data.desc.isNullOrEmpty ? Container(
                   padding: EdgeInsets.only(top: AppSpace.extraSmall),
                   child: Text(
                     data.desc,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.bodyLarge,
+                    style: context.textTheme.bodyMedium,
                   ),
-                ),
+                ) : null,
                 trailing: Icon(Icons.keyboard_arrow_right_rounded),
               );
             },
