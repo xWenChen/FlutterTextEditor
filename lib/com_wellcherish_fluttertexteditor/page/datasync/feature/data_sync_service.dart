@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/feature/datasync/data_sync_wifi_p2p_device.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/feature/data_sync_wifi_p2p_device.dart';
 
 typedef DeviceUpdateCallback = Future<bool> Function(Map<String, DataSyncWifiP2pDevice> deviceMap);
 

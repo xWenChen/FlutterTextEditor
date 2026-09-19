@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/feature/datasync/data_sync_service.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/feature/data_sync_service.dart';
 
 /// 表示 Wi-Fi Direct (P2P) 设备的状态和配置信息
 class DataSyncWifiP2pDevice {
