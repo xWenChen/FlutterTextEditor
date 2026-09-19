@@ -20,6 +20,12 @@ class SettingsViewModel extends BaseViewModel {
       iconData: Icons.phonelink_rounded
     ),
     SettingsItem(
+        type: SettingsType.colors,
+        name: Strings.colorsTitle,
+        pageRouteName: RouteConstants.colorSchemaExample,
+        iconData: Icons.color_lens_outlined
+    ),
+    SettingsItem(
       type: SettingsType.about,
       name: Strings.aboutTitle,
       pageRouteName: RouteConstants.settings,

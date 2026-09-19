@@ -27,4 +27,6 @@ class Strings {
   static const String dataSyncDesc = "将当前应用内的文档搬到其他设备上。";
   /// 关于页的Item
   static const String aboutTitle = "关于";
+  /// 应用配色说明
+  static const String colorsTitle = "应用配色说明";
 }
