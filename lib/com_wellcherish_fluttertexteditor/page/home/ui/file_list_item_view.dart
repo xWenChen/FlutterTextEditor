@@ -51,7 +51,7 @@ class FileListItemViewState extends State<FileListItemView> {
         (fileData?.title).ifEmpty(Strings.noTitle),
         maxLines: AppConfig.listTitleLines,
         overflow: TextOverflow.ellipsis,
-        style: context.textTheme.titleLarge?.merge(TextStyle(
+        style: context.textTheme.titleMedium?.merge(TextStyle(
           color: context.contentColor,
           fontWeight: FontWeight.w500,
         )),
@@ -61,7 +61,7 @@ class FileListItemViewState extends State<FileListItemView> {
           (fileData?.content).ifEmpty(Strings.noText),
           maxLines: AppConfig.listTextLines,
           overflow: TextOverflow.ellipsis,
-          style: context.textTheme.bodyLarge?.merge(TextStyle(
+          style: context.textTheme.bodyMedium?.merge(TextStyle(
             color: context.contentColor,
           )),
         ),
