@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/bean/file_data.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/config/app_config.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/material3/app_size.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/material3/app_space.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
@@ -61,14 +62,16 @@ class FileListItemViewState extends State<FileListItemView> {
         color: context.contentColor,
       )),
       overflow: TextOverflow.ellipsis,
-      trailing: isSelectionMode ? Checkbox(
-        value: itemSelected,
-        onChanged: (bool? newValue) async {
-          widget.onTap?.call(fileData, index, isSelectionMode, itemSelected);
-        },
+      trailing: isSelectionMode ? GestureDetector(
+        onTap: () => widget.onTap?.call(fileData, index, isSelectionMode, itemSelected),
+        child: Icon(
+          itemSelected ? Icons.check_circle_rounded : Icons.circle_outlined,
+          size: AppSize.mediumIcon,
+          color: context.contentColor,
+        ),
       ) : null,
-      trailingAlignment: Alignment.centerRight,
-      borderRadius: AppSpace.small,
+      trailingAlignment: Alignment.topRight,
+      borderRadius: AppSpace.smallX,
       backgroundColor: context.widgetBackground,
     );
   }
