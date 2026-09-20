@@ -36,22 +36,12 @@ class FileListViewState extends State<FileListView> {
       crossAxisSpacing: AppSpace.medium,
       itemBuilder: (context, index) {
         var data = list[index];
-        return Container(
-          // 1. 设置内边距（可选，防止内容紧贴边缘）
-          padding: const EdgeInsets.all(AppSpace.extraSmall),
-          // 2. 使用 decoration 配置背景色和圆角
-          decoration: BoxDecoration(
-            color: context.widgetBackground, // 白色背景
-            borderRadius: BorderRadius.circular(AppSpace.small), // 圆角半径（根据需要修改数值）
-          ),
-          // 3. 子组件
-          child: FileListItemView(
-            index: index,
-            fileData: data,
-            isSelectionMode: isSelectionMode,
-            onTap: widget.onItemTap,
-            onLongPress: widget.onItemLongPress,
-          ),
+        return FileListItemView(
+          index: index,
+          fileData: data,
+          isSelectionMode: isSelectionMode,
+          onTap: widget.onItemTap,
+          onLongPress: widget.onItemLongPress,
         );
       }
     );

@@ -8,6 +8,7 @@ extension ThemeContext on BuildContext {
   Color get appBackground => colorScheme.surfaceContainer;
   Color get widgetBackground => colorScheme.surface;
   Color get contentColor => colorScheme.primary;
+  IconThemeData get iconTheme => Theme.of(this).iconTheme;
   TextTheme get textTheme => Theme.of(this).textTheme;
   CardThemeData get cardTheme => Theme.of(this).cardTheme;
   GoRouter get goRouter => GoRouter.of(this);

@@ -6,6 +6,8 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/exten
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/resource/strings.dart';
 
+import '../../../base/ui/list/list_item_widget.dart';
+
 typedef ListItemTapCallback = Future<void> Function(FileData?, int, bool, bool);
 
 class FileListItemView extends StatefulWidget {
@@ -35,7 +37,7 @@ class FileListItemViewState extends State<FileListItemView> {
     final index = widget.index;
     final isSelectionMode = widget.isSelectionMode;
     final itemSelected = fileData?.itemSelected ?? false;
-    return ListTile(
+    return ListItemWidget(
       selected: itemSelected,
       onTap: () async {
         if (mounted) {
@@ -47,33 +49,27 @@ class FileListItemViewState extends State<FileListItemView> {
           widget.onLongPress?.call(fileData, index, isSelectionMode, itemSelected);
         }
       },
-      title: Text(
-        (fileData?.title).ifEmpty(Strings.noTitle),
-        maxLines: AppConfig.listTitleLines,
-        overflow: TextOverflow.ellipsis,
-        style: context.textTheme.titleMedium?.merge(TextStyle(
-          color: context.contentColor,
-          fontWeight: FontWeight.w500,
-        )),
-      ),
-      subtitle: Container(
-        child: Text(
-          (fileData?.content).ifEmpty(Strings.noText),
-          maxLines: AppConfig.listTextLines,
-          overflow: TextOverflow.ellipsis,
-          style: context.textTheme.bodyMedium?.merge(TextStyle(
-            color: context.contentColor,
-          )),
-        ),
-      ),
+      title: (fileData?.title).ifEmpty(Strings.noTitle),
+      titleMaxLines: AppConfig.listTitleLines,
+      titleStyle: context.textTheme.titleMedium?.merge(TextStyle(
+        color: context.contentColor,
+        fontWeight: FontWeight.w500,
+      )),
+      subTitle: (fileData?.content).ifEmpty(Strings.noText),
+      subTitleMaxLines: AppConfig.listTextLines,
+      subTitleStyle: context.textTheme.bodyMedium?.merge(TextStyle(
+        color: context.contentColor,
+      )),
+      overflow: TextOverflow.ellipsis,
       trailing: isSelectionMode ? Checkbox(
         value: itemSelected,
         onChanged: (bool? newValue) async {
           widget.onTap?.call(fileData, index, isSelectionMode, itemSelected);
         },
       ) : null,
-      dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
-      visualDensity: VisualDensity(vertical: -AppSpace.extraSmall), // 2. 将垂直方向的密度压到极致（范围 -4 到 4）
+      trailingAlignment: Alignment.centerRight,
+      borderRadius: AppSpace.small,
+      backgroundColor: context.widgetBackground,
     );
   }
 }
