@@ -16,7 +16,7 @@ class SettingsViewModel extends BaseViewModel {
       type: SettingsType.dataSync,
       name: Strings.dataSyncTitle,
       desc: Strings.dataSyncDesc,
-      pageRouteName: RouteConstants.settings,
+      pageRouteName: RouteConstants.dataSync,
       iconData: Icons.phonelink_rounded
     ),
     SettingsItem(

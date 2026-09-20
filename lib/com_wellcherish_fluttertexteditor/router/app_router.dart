@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/colors/color_scheme_example.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/data_sync_page.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_page.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
@@ -62,6 +63,13 @@ class AppRouter {
         path: "${RouteConstants.schema}${RouteConstants.colorSchemaExample}",
         builder: (context, state) {
           return ColorSchemeExample();
+        },
+      ),
+      GoRoute(
+        name: RouteConstants.dataSync,
+        path: "${RouteConstants.schema}${RouteConstants.dataSync}",
+        builder: (context, state) {
+          return DataSyncPage();
         },
       ),
     ],

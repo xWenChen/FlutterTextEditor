@@ -7,10 +7,10 @@ import '../../base/arch/base_state.dart';
 import '../../base/constants/material3/app_space.dart';
 import '../../base/extension/build_context_extension.dart';
 import '../../base/ui/appbar/editor_app_bar.dart';
+import '../../resource/strings.dart';
 import '../../router/app_router.dart';
 import 'data_sync_view_model.dart';
 
-/*
 class DataSyncPage extends StatefulWidget {
   const DataSyncPage({super.key});
 
@@ -32,6 +32,7 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
     return BaseView(
       viewModel: viewModel,
       appBar: EditorAppBar(
+        title: Strings.dataSyncTitle,
         handleBack: () async {
           AppRouter.handleBack(context);
         },
@@ -55,20 +56,30 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                     await onItemTap(data, index);
                   }
                 },
-                title: Text(
-                  data.deviceName,
-                  style: context.textTheme.titleMedium,
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      data.deviceName,
+                      style: context.textTheme.titleMedium,
+                    ),
+                    const SizedBox(width: AppSpace.small,),
+                    Text(
+                      data.deviceStatusDesc,
+                      style: context.textTheme.titleSmall,
+                    ),
+                  ],
                 ),
-                subtitle: !data.desc.isNullOrEmpty ? Container(
-                  padding: EdgeInsets.only(top: AppSpace.extraSmall),
+                subtitle: Container(
                   child: Text(
-                    data.desc,
-                    maxLines: 2,
+                    data.detailDesc,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: context.textTheme.bodySmall,
                   ),
-                ) : null,
-                leading: Icon(data.iconData),
+                ),
+                leading: Icon(Icons.devices_rounded),
                 trailing: Icon(Icons.keyboard_arrow_right_rounded),
                 contentPadding: EdgeInsets.symmetric(vertical: 0),
                 dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
@@ -90,4 +101,4 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
     /// todo 响应点击操作
 
   }
-}*/
+}
