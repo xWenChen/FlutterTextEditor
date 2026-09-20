@@ -23,5 +23,5 @@ class DefaultConfig {
   /**
    * 列表数据，文本可以展示的行数。
    * */
-  static final int listTextLines = 2;
+  static final int listTextLines = 3;
 }
