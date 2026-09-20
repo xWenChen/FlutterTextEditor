@@ -32,6 +32,14 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
     viewModel = EditorViewModel(
       getTitle: ()  => _titleController.text,
       getContent: () => _contentController.text,
+      updateText: () {
+        if(viewModel.lastSavedTitle != _titleController.text) {
+          _titleController.text = viewModel.lastSavedTitle;
+        }
+        if(viewModel.lastSavedContent != _contentController.text) {
+          _contentController.text = viewModel.lastSavedContent;
+        }
+      },
       onFail: () =>_showSaveErrorTip(),
     );
 

@@ -6,7 +6,6 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/config/app_config.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/database/bean/file_item.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/file_extension.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/string_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/utils/EventManager.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/data/file_data_source.dart';
 
@@ -29,17 +28,19 @@ class EditorViewModel extends BaseViewModel {
   File? file;
   String Function() getTitle;
   String Function() getContent;
+  void Function() updateText;
   void Function() onFail;
 
   Timer? _timer;
-  String _lastSavedTitle = "";
-  String _lastSavedContent = "";
+  String lastSavedTitle = "";
+  String lastSavedContent = "";
 
   bool isBacking = false;
 
   EditorViewModel({
     required this.getTitle,
     required this.getContent,
+    required this.updateText,
     required this.onFail,
     this.file,
   });
@@ -65,9 +66,9 @@ class EditorViewModel extends BaseViewModel {
         updateTime: DateTime.now().millisecondsSinceEpoch,
       ),
     );
-    _lastSavedTitle = "";
-    _lastSavedContent = "";
-    notifyListeners();
+    lastSavedTitle = "";
+    lastSavedContent = "";
+    updateText();
   }
 
   Future<void> openExistFile() async {
@@ -80,9 +81,9 @@ class EditorViewModel extends BaseViewModel {
     if (!(await file?.exists() ?? false)) {
       await file?.create();
     }
-    _lastSavedTitle = fileData.title ?? "";
-    _lastSavedContent = fileData.content ?? "";
-    notifyListeners();
+    lastSavedTitle = fileData.title ?? "";
+    lastSavedContent = fileData.content ?? "";
+    updateText();
   }
 
   /// 文件已经保存了，才允许直接退出。
@@ -102,11 +103,11 @@ class EditorViewModel extends BaseViewModel {
   }
 
   bool titleSame(String title) {
-    return _lastSavedTitle == title;
+    return lastSavedTitle == title;
   }
 
   bool contentSame(String content) {
-    return _lastSavedContent == content;
+    return lastSavedContent == content;
   }
 
   /// 更新保存状态并通知 UI
@@ -128,7 +129,7 @@ class EditorViewModel extends BaseViewModel {
     String currentTitle = getTitle();
     String currentText = getContent();
 
-    if (currentTitle == _lastSavedTitle && currentText == _lastSavedContent) {
+    if (currentTitle == lastSavedTitle && currentText == lastSavedContent) {
       return;
     }
 
@@ -169,8 +170,8 @@ class EditorViewModel extends BaseViewModel {
     await _dataSource.insertOrUpdateOne(dbItem);
 
     // 更新最后一次保存的内容
-    _lastSavedTitle = currentTitle;
-    _lastSavedContent = currentText;
+    lastSavedTitle = currentTitle;
+    lastSavedContent = currentText;
 
     EventManager.emit(FileChangeType.update.name);
 
