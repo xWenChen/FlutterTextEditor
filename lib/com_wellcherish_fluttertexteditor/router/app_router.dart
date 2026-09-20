@@ -103,6 +103,12 @@ class AppRouter {
     if (didPop) return;
 
     // 3. 判断是否可以返回 (GoRouter 的判断方式)
+    await handleBackDirectly(context);
+  }
+
+  /// 处理返回按钮
+  static Future<void> handleBackDirectly(BuildContext context) async {
+    // 3. 判断是否可以返回 (GoRouter 的判断方式)
     final router = GoRouter.of(context);
     if (router.canPop()) {
       // 直接返回上一页

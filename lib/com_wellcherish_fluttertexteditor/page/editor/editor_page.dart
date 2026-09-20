@@ -53,23 +53,22 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _titleController.removeListener(onTitleChanged);
     _titleController.dispose();
-    _contentController.addListener(onContentChanged);
+    _contentController.removeListener(onContentChanged);
     _contentController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseView(
       viewModel: viewModel,
-      canPop: () => viewModel.canPop,
+      canPop: () => false,
       onPopInvokedWithResult: handleBack,
       appBar: EditorAppBar(
-        handleBack: () async {
-          handleBack(viewModel.canPop, null);
-        },
+        // 标题栏返回按钮逻辑：触发系统 pop，交由 PopScope 统一拦截处理
+        handleBack: () async => Navigator.maybePop(context),
       ),
       builder: (context, child) {
         return Container(
@@ -89,14 +88,21 @@ class _EditorPageState extends BaseState<EditorViewModel, EditorPage> {
     );
   }
 
-  Future<void> handleBack(bool canPop, Object? result) async {
+  Future<void> handleBack(bool didPop, Object? result) async {
     // 如果页面已经退出了（didPop 为 true），则不执行逻辑
-    if (!canPop) return;
+    if (didPop || viewModel.isBacking) return;
 
-    // 执行保存操作
-    await viewModel.trySave();
+    viewModel.isBacking = true;
 
-    AppRouter.handleBack(context);
+    if (!viewModel.saved) {
+      // 执行保存操作
+      await viewModel.trySave();
+    }
+
+    // 3. 确保 Context 仍然挂载在树上，然后再执行真正的 Pop 退出
+    if (mounted) {
+      await AppRouter.handleBackDirectly(context);
+    }
   }
 
   void onTitleChanged() {

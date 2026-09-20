@@ -35,6 +35,8 @@ class EditorViewModel extends BaseViewModel {
   String _lastSavedTitle = "";
   String _lastSavedContent = "";
 
+  bool isBacking = false;
+
   EditorViewModel({
     required this.getTitle,
     required this.getContent,
@@ -84,7 +86,7 @@ class EditorViewModel extends BaseViewModel {
   }
 
   /// 文件已经保存了，才允许直接退出。
-  bool get canPop {
+  bool get saved {
     return saveState == FileSaveState.saved;
   }
 

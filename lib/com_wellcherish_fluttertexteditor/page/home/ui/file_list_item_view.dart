@@ -51,15 +51,19 @@ class FileListItemViewState extends State<FileListItemView> {
         (fileData?.title).ifEmpty(Strings.noTitle),
         maxLines: AppConfig.listTitleLines,
         overflow: TextOverflow.ellipsis,
-        style: context.textTheme.titleLarge,
+        style: context.textTheme.titleLarge?.merge(TextStyle(
+          color: context.contentColor,
+          fontWeight: FontWeight.w500,
+        )),
       ),
       subtitle: Container(
-        padding: EdgeInsets.only(top: AppSpace.extraSmall),
         child: Text(
           (fileData?.content).ifEmpty(Strings.noText),
           maxLines: AppConfig.listTextLines,
           overflow: TextOverflow.ellipsis,
-          style: context.textTheme.bodyLarge,
+          style: context.textTheme.bodyLarge?.merge(TextStyle(
+            color: context.contentColor,
+          )),
         ),
       ),
       trailing: isSelectionMode ? Checkbox(
@@ -68,6 +72,8 @@ class FileListItemViewState extends State<FileListItemView> {
           widget.onTap?.call(fileData, index, isSelectionMode, itemSelected);
         },
       ) : null,
+      dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
+      visualDensity: VisualDensity(vertical: -AppSpace.extraSmall), // 2. 将垂直方向的密度压到极致（范围 -4 到 4）
     );
   }
 }
