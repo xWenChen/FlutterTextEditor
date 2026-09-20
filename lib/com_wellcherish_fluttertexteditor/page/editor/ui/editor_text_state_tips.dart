@@ -30,7 +30,7 @@ class _EditorTextStateTipsState extends State<EditorTextStateTips> {
   static final String _tag = "_EditorTextStateTipsState";
   @override
   Widget build(BuildContext context) {
-    final (icon, color, tips) = getTipsInfo(widget.saveState);
+    final (icon, color, tips) = getTipsInfo(context, widget.saveState);
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: AppSpace.extraSmall),
@@ -69,8 +69,10 @@ class _EditorTextStateTipsState extends State<EditorTextStateTips> {
                 onPressed: widget.topEnable ? () {
                   widget.onScroll?.call(true);
                 } : null,
-                backgroundColor: context.colorScheme.primaryContainer,
-                disabledBackgroundColor: context.colorScheme.surfaceContainer,
+                foregroundColor: context.widgetBackground,
+                disabledForegroundColor: context.colorScheme.secondaryFixedDim,
+                backgroundColor: context.contentColor,
+                disabledBackgroundColor: context.appBackground,
               ),
               SizedBox(width: AppSpace.medium,), // 间距
               // 滚动到底部。
@@ -79,17 +81,22 @@ class _EditorTextStateTipsState extends State<EditorTextStateTips> {
                 onPressed: widget.bottomEnable ? () {
                   widget.onScroll?.call(false);
                 } : null,
-                backgroundColor: context.colorScheme.primaryContainer,
-                disabledBackgroundColor: context.colorScheme.surfaceContainer,
+                foregroundColor: context.widgetBackground,
+                disabledForegroundColor: context.colorScheme.secondaryFixedDim,
+                backgroundColor: context.contentColor,
+                disabledBackgroundColor: context.appBackground,
               ),
               SizedBox(width: AppSpace.medium,), // 间距
               // 清除文本。
               EditTextFunction(
                 iconData: Icons.delete_forever_rounded,
                 onPressed: widget.onClearText,
-                backgroundColor: context.colorScheme.errorContainer,
-                disabledBackgroundColor: context.colorScheme.surfaceContainer,
+                foregroundColor: context.colorScheme.onError,
+                disabledForegroundColor: context.colorScheme.secondaryFixedDim,
+                backgroundColor: context.colorScheme.error,
+                disabledBackgroundColor: context.appBackground,
               ),
+              SizedBox(width: AppSpace.medium,), // 间距
             ],
           ),
         ],
@@ -97,16 +104,16 @@ class _EditorTextStateTipsState extends State<EditorTextStateTips> {
     );
   }
 
-  (IconData, Color, String) getTipsInfo(FileSaveState state) {
+  (IconData, Color, String) getTipsInfo(BuildContext context, FileSaveState state) {
     switch (state) {
       case FileSaveState.dataLoading:
-        return (Icons.change_circle_rounded, Colors.blue, Strings.dataLoading);
+        return (Icons.change_circle_rounded, context.colorScheme.tertiary, Strings.dataLoading); // 蓝色
       case FileSaveState.unsaved:
-        return (Icons.sentiment_dissatisfied_rounded, Colors.red, Strings.unsaved);
+        return (Icons.sentiment_dissatisfied_rounded, context.colorScheme.error, Strings.unsaved); // 红色
       case FileSaveState.saving:
-        return (Icons.sentiment_neutral_rounded, Colors.orange, Strings.saving);
+        return (Icons.sentiment_neutral_rounded, context.colorScheme.primaryContainer, Strings.saving); // 浅绿色
       case FileSaveState.saved:
-        return (Icons.sentiment_satisfied_rounded, Colors.green, Strings.saved);
+        return (Icons.sentiment_satisfied_rounded, context.contentColor, Strings.saved); // 绿色
     }
   }
 }
@@ -135,7 +142,7 @@ class EditTextFunction extends StatelessWidget {
       icon: Icon(iconData,),
       onPressed: onPressed,
       iconSize: AppSize.littleSmall,
-      padding: EdgeInsets.all(AppSpace.extraSmall), // 清除默认内边距
+      padding: EdgeInsets.all(AppSpace.extraSmallS), // 清除默认内边距
       constraints: const BoxConstraints(), // 清除默认的 48dp 最小限制
       style: IconButton.styleFrom(
         foregroundColor: foregroundColor,

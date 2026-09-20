@@ -76,7 +76,9 @@ class _EditorViewState extends State<EditorView> {
           saveTrimText: widget.saveTrimText,
           maxTextLines: 1,
           maxTextLength: AppConfig.titleTextLength,
-          textStyle: context.textTheme.titleLarge,
+          textStyle: context.textTheme.titleLarge?.copyWith(
+            color: context.contentColor,
+          ),
           controller: _titleController,
           showSuffixIcon: true,
         ),
@@ -112,7 +114,9 @@ class _EditorViewState extends State<EditorView> {
             child: EditorTextField(
               hint: widget.contentHint,
               saveTrimText: widget.saveTrimText,
-              textStyle: context.textTheme.bodyLarge,
+              textStyle: context.textTheme.bodyLarge?.copyWith(
+                color: context.contentColor,
+              ),
               controller: _contentController,
               scrollController: _scrollController,
               expanded: true,

@@ -66,10 +66,16 @@ class _EditorTextFieldState extends State<EditorTextField> {
         fillColor: context.appBackground,
         // Hint 提示
         hintText: widget.hint,
+        hintStyle: widget.textStyle?.copyWith(
+          color: context.colorScheme.secondaryFixedDim,
+        ),
         border: InputBorder.none,//const OutlineInputBorder(),
         // 如果为空，返回 null；如果不为空，展示清除按钮。
         suffixIcon: widget.showSuffixIcon && controller?.text.isNullOrEmpty != true ? IconButton(
-          icon: const Icon(Icons.cancel_rounded),
+          icon: Icon(
+            Icons.cancel_rounded,
+            color: context.contentColor,
+          ),
           onPressed: () {
             controller?.clear(); // 点击清空内容
           },
