@@ -1,30 +1,31 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/feature/data_sync_wifi_p2p_device.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/router/route_constants.dart';
 
-import '../../base/arch/base_state.dart';
-import '../../base/constants/load_state.dart';
-import '../../base/constants/material3/app_space.dart';
-import '../../base/extension/build_context_extension.dart';
-import '../../base/ui/appbar/editor_app_bar.dart';
-import '../../base/ui/state_widget/empty_view.dart';
-import '../../base/ui/state_widget/loading_view.dart';
-import '../../resource/strings.dart';
-import '../../router/app_router.dart';
-import 'data_sync_view_model.dart';
+import '../../../base/arch/base_state.dart';
+import '../../../base/constants/load_state.dart';
+import '../../../base/constants/material3/app_space.dart';
+import '../../../base/extension/build_context_extension.dart';
+import '../../../base/ui/appbar/editor_app_bar.dart';
+import '../../../base/ui/state_widget/empty_view.dart';
+import '../../../base/ui/state_widget/loading_view.dart';
+import '../../../resource/strings.dart';
+import '../../../router/app_router.dart';
+import '../feature/data_sync_wifi_p2p_device.dart';
+import 'data_sync_list_view_model.dart';
 
-class DataSyncPage extends StatefulWidget {
-  const DataSyncPage({super.key});
+class DataSyncListPage extends StatefulWidget {
+  const DataSyncListPage({super.key});
 
   @override
-  State<DataSyncPage> createState() => _DataSyncPageState();
+  State<DataSyncListPage> createState() => _DataSyncListPageState();
 }
 
-class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
+class _DataSyncListPageState extends BaseState<DataSyncListViewModel, DataSyncListPage> {
 
   @override
   void createViewModel() {
-    viewModel =  DataSyncViewModel();
+    viewModel =  DataSyncListViewModel();
     viewModel.init();
   }
 
@@ -142,5 +143,9 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
       return;
     }
     /// todo 响应点击操作
+    await context.goRouter.pushNamed(
+      RouteConstants.dataSyncDetail,
+      extra: data,
+    );
   }
 }

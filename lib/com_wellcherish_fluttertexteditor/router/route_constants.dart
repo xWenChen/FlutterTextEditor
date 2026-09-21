@@ -15,6 +15,8 @@ class RouteConstants {
   static const String settings = "settings";
   /// 配色说明
   static const String colorSchemaExample = "colorSchemaExample";
-  /// 数据搬家页
-  static const String dataSync = "dataSync";
+  /// 数据搬家列表页
+  static const String dataSyncList = "dataSyncList";
+  /// 数据搬家详情页页
+  static const String dataSyncDetail = "dataSyncDetail";
 }

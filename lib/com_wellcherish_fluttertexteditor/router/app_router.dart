@@ -6,11 +6,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/colors/color_scheme_example.dart';
-import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/data_sync_page.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/detail/data_sync_detail_page.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/feature/data_sync_wifi_p2p_device.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_page.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
+import '../page/datasync/list/data_sync_list_page.dart';
 import '../page/editor/editor_page.dart';
 import '../page/home/home_page.dart';
 import 'route_constants.dart';
@@ -66,10 +68,19 @@ class AppRouter {
         },
       ),
       GoRoute(
-        name: RouteConstants.dataSync,
-        path: "${RouteConstants.schema}${RouteConstants.dataSync}",
+        name: RouteConstants.dataSyncList,
+        path: "${RouteConstants.schema}${RouteConstants.dataSyncList}",
         builder: (context, state) {
-          return DataSyncPage();
+          return DataSyncListPage();
+        },
+      ),
+      GoRoute(
+        name: RouteConstants.dataSyncDetail,
+        path: "${RouteConstants.schema}${RouteConstants.dataSyncDetail}",
+        builder: (context, state) {
+          // 1. 从 state.extra 取出对象并强转
+          final device = state.extra as DataSyncWifiP2pDevice;
+          return DataSyncDetailPage(currentDevice: device,);
         },
       ),
     ],
