@@ -74,7 +74,9 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                           children: [
                             Text(
                               data.deviceName,
-                              style: context.textTheme.titleMedium,
+                              style: context.textTheme.titleMedium?.copyWith(
+                                color: context.contentColor,
+                              ),
                             ),
                             const SizedBox(width: AppSpace.small,),
                             Text(
@@ -90,11 +92,19 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                             data.detailDesc,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: context.textTheme.bodySmall,
+                            style: context.textTheme.bodySmall?.copyWith(
+                              color: context.contentColor,
+                            ),
                           ),
                         ),
-                        leading: Icon(data.deviceType.icon),
-                        trailing: Icon(Icons.keyboard_arrow_right_rounded),
+                        leading: Icon(
+                          data.deviceType.icon,
+                          color: context.contentColor,
+                        ),
+                        trailing: Icon(
+                          Icons.keyboard_arrow_right_rounded,
+                          color: context.contentColor,
+                        ),
                         contentPadding: EdgeInsets.symmetric(vertical: 0),
                         dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
                         visualDensity: VisualDensity(vertical: -AppSpace.extraSmall), // 2. 将垂直方向的密度压到极致（范围 -4 到 4）

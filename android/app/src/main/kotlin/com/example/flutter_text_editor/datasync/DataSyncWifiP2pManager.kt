@@ -84,13 +84,15 @@ object DataSyncWifiP2pManager {
             return false
         }
         // 此处的回调不可信。设备发现后，框架层会发送 WIFI_P2P_PEERS_CHANGED_ACTION 广播。
+        // 1、注意：其他设备需要打开定位权限。
+        // 2、打开另一台手机的：设置 -> Wi-Fi -> 高级设置/更多设置 -> Wi-Fi 直连 (Wi-Fi Direct)，停留在该页面。
         wifiP2pManager?.discoverPeers(wifiP2pChannel, object : WifiP2pManager.ActionListener {
             override fun onFailure(reason: Int) {
-
+                val result = false
             }
 
             override fun onSuccess() {
-
+                val result = false
             }
         })
         return true
@@ -211,15 +213,19 @@ object DataSyncWifiP2pManager {
         }
         return getActivity()?.let { activity ->
             WiFiDirectBroadcastReceiver(wifiP2pManager, wifiP2pChannel, activity).let {
+                unregisterReceiver()
                 receiver = it
-                activity.registerReceiver(receiver, intentFilter)
+                activity.registerReceiver(it, intentFilter)
             }
             true
         } ?: false
     }
 
     private fun unregisterReceiver(): Boolean {
-        getActivity()?.unregisterReceiver(receiver)
+        receiver?.let {
+            getActivity()?.unregisterReceiver(it) ?: return false
+        } ?: return false
+        receiver = null
         return true
     }
 

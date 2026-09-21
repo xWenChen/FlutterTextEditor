@@ -21,7 +21,7 @@ class DataSyncService {
       switch (call.method) {
         case 'updateDeviceMap':
         // 获取 Android 传递过来的参数
-          final Map<String, String> deviceMap = call.arguments as Map<String, String>;
+          final Map<String, String> deviceMap = Map<String, String>.from(call.arguments as Map);
           updateDeviceMap(deviceMap);
         default:
           throw MissingPluginException('未实现的 Dart 方法: ${call.method}');

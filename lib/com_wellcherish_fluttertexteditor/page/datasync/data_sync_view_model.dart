@@ -20,7 +20,7 @@ class DataSyncViewModel extends BaseViewModel {
 
   /// 初始化 -> discoverPeers -> requestPeers。
   Future<void> init() async {
-    state.value = LoadState.empty;
+    state.value = LoadState.loading;
     /// 开始扫描、获取设备列表。
     final service = DataSyncService();
     service.registerDeviceUpdateCallback(updateDevices);
