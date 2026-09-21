@@ -23,8 +23,13 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
   @override
   void createViewModel() {
     viewModel =  DataSyncViewModel();
-
     viewModel.init();
+  }
+
+  @override
+  void dispose() {
+    viewModel.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +72,9 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                     const SizedBox(width: AppSpace.small,),
                     Text(
                       data.deviceStatusDesc,
-                      style: context.textTheme.titleSmall,
+                      style: context.textTheme.titleSmall?.copyWith(
+                        color: data.deviceStatus.parseDeviceColor(context),
+                      ),
                     ),
                   ],
                 ),
@@ -79,7 +86,7 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                     style: context.textTheme.bodySmall,
                   ),
                 ),
-                leading: Icon(Icons.devices_rounded),
+                leading: Icon(data.deviceType.icon),
                 trailing: Icon(Icons.keyboard_arrow_right_rounded),
                 contentPadding: EdgeInsets.symmetric(vertical: 0),
                 dense: true, // 1. 开启紧凑模式，缩小默认的高度和字体间距
@@ -99,6 +106,5 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
       return;
     }
     /// todo 响应点击操作
-
   }
 }

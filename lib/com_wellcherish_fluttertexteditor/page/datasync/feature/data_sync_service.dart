@@ -12,7 +12,7 @@ class DataSyncService {
   // 1. 定义统一的 MethodChannel（使用 static final 保证全局唯一）
   late MethodChannel _channel = MethodChannel(channelName);
 
-  List<DeviceUpdateCallback> deviceUpdateCallbackList = List<DeviceUpdateCallback>.empty(growable: true);
+  List<DeviceUpdateCallback> _deviceUpdateCallbackList = List<DeviceUpdateCallback>.empty(growable: true);
 
   // 2. 私有构造函数，防止外部直接构造实例
   DataSyncService._internal() {
@@ -34,6 +34,14 @@ class DataSyncService {
 
   // 4. 工厂构造函数，每次调用都返回同一个实例
   factory DataSyncService() => _instance;
+
+  Future<void> init() async {
+    return await invokePlatformMethod("init");
+  }
+
+  Future<void> release() async {
+    return await invokePlatformMethod("release");
+  }
 
   /// 获取设备的具体信息。
   Future<String?> getDetails(String deviceAddress) async {
@@ -58,6 +66,20 @@ class DataSyncService {
     return await invokePlatformMethod("disconnect") ?? false;
   }
 
+  void registerDeviceUpdateCallback(DeviceUpdateCallback? callback) {
+    if (callback == null) {
+      return;
+    }
+    _deviceUpdateCallbackList.add(callback);
+  }
+
+  void unregisterDeviceUpdateCallback(DeviceUpdateCallback? callback) {
+    if (callback == null) {
+      return;
+    }
+    _deviceUpdateCallbackList.remove(callback);
+  }
+
   Future<bool> updateDeviceMap(Map<String, String> rawMap) async {
     // 执行 Flutter 侧的能力（如刷新UI、弹窗、播放声音等）
     final deviceMap = rawMap.map((key, value) {
@@ -67,7 +89,7 @@ class DataSyncService {
       );
     });
 
-    deviceUpdateCallbackList.forEach((callback) => callback(deviceMap));
+    _deviceUpdateCallbackList.forEach((callback) => callback(deviceMap));
 
     // 给 Android 侧返回处理结果
     return true;

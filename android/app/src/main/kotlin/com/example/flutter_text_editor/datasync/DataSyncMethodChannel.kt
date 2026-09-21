@@ -1,9 +1,7 @@
 package com.example.flutter_text_editor.datasync
 
-import android.R.attr.name
 import android.annotation.SuppressLint
 import android.net.wifi.p2p.WifiP2pDevice
-import com.example.flutter_text_editor.datasync.DataSyncWifiP2pManager.deviceStatusDesc
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import org.json.JSONObject
@@ -22,6 +20,10 @@ object DataSyncMethodChannel {
             when(call.method) {
                 "init" -> {
                     DataSyncWifiP2pManager.init()
+                    result.success(true)
+                }
+                "release" -> {
+                    DataSyncWifiP2pManager.release()
                     result.success(true)
                 }
                 "getDetails" -> {
@@ -72,7 +74,9 @@ object DataSyncMethodChannel {
             resultMap[address] = JSONObject().apply {
                 put("deviceName", device.deviceAddress)
                 put("deviceAddress", device.deviceAddress)
-                put("deviceStatusDesc", device.deviceStatusDesc())
+                put("deviceStatus", device.status)
+                put("detailDesc", device.toString())
+                put("deviceType", device.primaryDeviceType)
             }.toString()
         }
         channel?.invokeMethod("updateDeviceMap", resultMap)

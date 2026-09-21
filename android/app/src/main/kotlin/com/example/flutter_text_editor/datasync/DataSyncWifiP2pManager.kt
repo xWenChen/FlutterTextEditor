@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import com.example.flutter_text_editor.MainActivity
 import com.example.flutter_text_editor.MainApplication
 import io.flutter.embedding.android.FlutterActivity
-import org.json.JSONObject
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -48,6 +47,8 @@ object DataSyncWifiP2pManager {
 
     private var receiver: WiFiDirectBroadcastReceiver? = null
 
+    private var destroyed = false
+
         /**
      * 1. 检查权限。
      * 2. 初始化实例。
@@ -62,6 +63,7 @@ object DataSyncWifiP2pManager {
     @AccessedByFlutter
     fun init() {
         val activity = getActivity() ?: return
+        destroyed = false
         if (!checkPermission(activity)) {
             // 等待授权。
             return
@@ -73,11 +75,25 @@ object DataSyncWifiP2pManager {
      * 2. 初始化实例。
      * 3. 注册广播接收器。
      * */
+    @SuppressLint("NewApi")
     fun continueInit(activity: Activity): Boolean {
         if (!initP2pManager(activity)) {
             return false
         }
-        return registerReceiver()
+        if (!registerReceiver()) {
+            return false
+        }
+        // 此处的回调不可信。设备发现后，框架层会发送 WIFI_P2P_PEERS_CHANGED_ACTION 广播。
+        wifiP2pManager?.discoverPeers(wifiP2pChannel, object : WifiP2pManager.ActionListener {
+            override fun onFailure(reason: Int) {
+
+            }
+
+            override fun onSuccess() {
+
+            }
+        })
+        return true
     }
 
     @SuppressLint("NewApi", "WifiManagerLeak")
@@ -108,6 +124,7 @@ object DataSyncWifiP2pManager {
         wifiP2pChannel = null
         deviceMap.clear()
         unregisterReceiver()
+        destroyed = true
     }
 
     @AccessedByFlutter
@@ -170,6 +187,9 @@ object DataSyncWifiP2pManager {
     }
 
     fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String?>, grantResults: IntArray) {
+        if (destroyed) {
+            return
+        }
         if (requestCode != PERMISSION_REQUEST_CODE) {
             return
         }
@@ -220,18 +240,5 @@ object DataSyncWifiP2pManager {
         device ?: return
         deviceMap[device.deviceAddress] = device
         DataSyncMethodChannel.updateDeviceMap(deviceMap)
-    }
-
-    @SuppressLint("NewApi")
-    fun WifiP2pDevice?.deviceStatusDesc(): String {
-        this ?: return "deviceNull"
-        return when (status) {
-            WifiP2pDevice.AVAILABLE -> "Available"
-            WifiP2pDevice.INVITED -> "Invited"
-            WifiP2pDevice.CONNECTED -> "Connected"
-            WifiP2pDevice.FAILED -> "Failed"
-            WifiP2pDevice.UNAVAILABLE -> "Unavailable"
-            else -> "Unknown"
-        }
     }
 }
