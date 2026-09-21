@@ -30,4 +30,5 @@ class Strings {
   /// 应用配色说明
   static const String colorsTitle = "应用配色预览";
   static const String settingsTitle = "设置";
+  static const String noDevice = "暂未发现设备";
 }
