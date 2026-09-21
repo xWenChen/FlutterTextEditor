@@ -24,7 +24,7 @@ enum DeviceStatus {
   /// 验证与下一步： 处于此状态并不代表 TCP/UDP 套接字已连通，成功连接后需调用 requestConnectionInfo() 来获取组长的 IP 地址（Group Owner IP），进而建立 Socket 进行数据传输。
   connected(
     status: 0,
-    desc: "设备已连接",
+    desc: "已连接",
   ),
   /// INVITED (数值: 1)
   /// 含义： 已邀请 / 连接协商中。
@@ -32,7 +32,7 @@ enum DeviceStatus {
   /// 典型场景： 调用 connect() 之后、正式建立连接之前的过渡状态。
   invited(
     status: 1,
-    desc: "设备连接中",
+    desc: "连接中",
   ),
   /// FAILED (数值: 2)
   /// 含义： 连接失败。
@@ -40,7 +40,7 @@ enum DeviceStatus {
   /// 典型场景： 对方拒绝了连接邀请、连接超时、或者 GO 协商失败。此时设备无法直接传输数据，通常需要重新扫描或重新发起连接。
   failed(
     status: 2,
-    desc: "设备连接失败",
+    desc: "连接失败",
   ),
   /// AVAILABLE (数值: 3)
   /// 含义： 可用/可连接。
@@ -48,7 +48,7 @@ enum DeviceStatus {
   /// 典型场景： 刚执行完 discoverPeers()，被发现的对端设备绝大多数处于此状态，此时可以对其调用 connect() 发起连接请求。
   available(
     status: 3,
-    desc: "设备可用",
+    desc: "可连接",
   ),
   /// UNAVAILABLE (数值: 4)
   /// 含义： 不可用。
@@ -59,7 +59,7 @@ enum DeviceStatus {
   ///    设备超出了信号覆盖范围，但其缓存尚未被彻底清除。
   unavailable(
     status: 4,
-    desc: "设备不可用",
+    desc: "不可用",
   );
 
   final int status;
