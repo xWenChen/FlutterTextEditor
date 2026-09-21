@@ -72,7 +72,7 @@ object DataSyncMethodChannel {
         for ((address, device) in deviceMap) {
             // 构建内层的 JSON 对象
             resultMap[address] = JSONObject().apply {
-                put("deviceName", device.deviceAddress)
+                put("deviceName", device.deviceName)
                 put("deviceAddress", device.deviceAddress)
                 put("deviceStatus", device.status)
                 put("detailDesc", device.toString())

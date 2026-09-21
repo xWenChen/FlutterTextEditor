@@ -70,12 +70,17 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                         },
                         title: Row(
                           mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              data.deviceName,
-                              style: context.textTheme.titleMedium?.copyWith(
-                                color: context.contentColor,
+                            Expanded(
+                              child: Text(
+                                data.deviceName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: context.textTheme.titleMedium?.copyWith(
+                                  color: context.contentColor,
+                                ),
                               ),
                             ),
                             const SizedBox(width: AppSpace.small,),
@@ -89,7 +94,7 @@ class _DataSyncPageState extends BaseState<DataSyncViewModel, DataSyncPage> {
                         ),
                         subtitle: Container(
                           child: Text(
-                            data.detailDesc,
+                            data.deviceType.label,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: context.textTheme.bodySmall?.copyWith(
