@@ -4,9 +4,11 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/
 
 import '../../../base/arch/base_state.dart';
 import '../../../base/constants/material3/app_space.dart';
+import '../../../base/ui/appbar/appbar_info_item.dart';
 import '../../../base/ui/appbar/editor_app_bar.dart';
 import '../../../resource/strings.dart';
 import '../../../router/app_router.dart';
+import '../../../router/route_constants.dart';
 import '../feature/data_sync_wifi_p2p_device.dart';
 import 'data_sync_detail_view_model.dart';
 
@@ -44,7 +46,7 @@ class _DataSyncDetailPageState extends BaseState<DataSyncDetailViewModel, DataSy
         handleBack: () async {
           AppRouter.handleBack(context);
         },
-        actions: () => <Widget>[],
+        actions: () => <Widget>[AppbarInfoItem(pageName: RouteConstants.dataSyncExplain)],
       ),
       builder: (context, child) {
         return Container(

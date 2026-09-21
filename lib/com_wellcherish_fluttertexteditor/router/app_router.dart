@@ -12,6 +12,7 @@ import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/setti
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/splash/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
+import '../page/datasync/explain/data_sync_explain_page.dart';
 import '../page/datasync/list/data_sync_list_page.dart';
 import '../page/editor/editor_page.dart';
 import '../page/home/home_page.dart';
@@ -81,6 +82,13 @@ class AppRouter {
           // 1. 从 state.extra 取出对象并强转
           final device = state.extra as DataSyncWifiP2pDevice;
           return DataSyncDetailPage(currentDevice: device,);
+        },
+      ),
+      GoRoute(
+        name: RouteConstants.dataSyncExplain,
+        path: "${RouteConstants.schema}${RouteConstants.dataSyncExplain}",
+        builder: (context, state) {
+          return DataSyncExplainPage();
         },
       ),
     ],

@@ -6,6 +6,7 @@ import '../../../base/arch/base_state.dart';
 import '../../../base/constants/load_state.dart';
 import '../../../base/constants/material3/app_space.dart';
 import '../../../base/extension/build_context_extension.dart';
+import '../../../base/ui/appbar/appbar_info_item.dart';
 import '../../../base/ui/appbar/editor_app_bar.dart';
 import '../../../base/ui/state_widget/empty_view.dart';
 import '../../../base/ui/state_widget/loading_view.dart';
@@ -44,7 +45,7 @@ class _DataSyncListPageState extends BaseState<DataSyncListViewModel, DataSyncLi
           handleBack: () async {
             AppRouter.handleBack(context);
           },
-          actions: () => <Widget>[],
+          actions: () => <Widget>[AppbarInfoItem(pageName: RouteConstants.dataSyncExplain)],
         ),
         body: ListenableBuilder(
           listenable: Listenable.merge([viewModel.state, viewModel.dataList]),

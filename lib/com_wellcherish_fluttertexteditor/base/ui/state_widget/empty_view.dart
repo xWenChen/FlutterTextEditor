@@ -9,7 +9,7 @@ class EmptyView extends StatefulWidget {
   final String text;
   const EmptyView({
     super.key,
-    this.text = Strings.noData
+    this.text = Strings.noDataAdd
   });
 
   @override
