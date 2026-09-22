@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 
 import '../../../base/arch/base_state.dart';
 import '../../../base/constants/material3/app_space.dart';
@@ -57,7 +58,24 @@ class _DataSyncDetailPageState extends BaseState<DataSyncDetailViewModel, DataSy
             right: AppSpace.medium,
           ),
           alignment: Alignment.center,
-          child: SizedBox(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "设备信息",
+                style: context.textTheme.titleMedium?.copyWith(
+                  color: context.contentColor,
+                ),
+              ),
+              Text(
+                viewModel.data.value.getSimpleDesc(),
+                style: context.textTheme.bodyMedium?.copyWith(
+                  color: context.contentColor,
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

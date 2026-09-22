@@ -96,7 +96,7 @@ class _DataSyncListPageState extends BaseState<DataSyncListViewModel, DataSyncLi
                         ),
                         subtitle: Container(
                           child: Text(
-                            data.deviceType.label,
+                            data.primaryDeviceType.label,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: context.textTheme.bodySmall?.copyWith(
@@ -105,7 +105,7 @@ class _DataSyncListPageState extends BaseState<DataSyncListViewModel, DataSyncLi
                           ),
                         ),
                         leading: Icon(
-                          data.deviceType.icon,
+                          data.primaryDeviceType.icon,
                           color: context.contentColor,
                         ),
                         trailing: Icon(
