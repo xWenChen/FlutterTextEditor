@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap
 object DataSyncWifiP2pManager {
     const val PERMISSION_REQUEST_CODE = 1001
 
+    private var thisDeviceAddress: WifiP2pDevice? = null
     // 维护的设备列表。device.deviceAddress -> WifiP2pDevice
     private val deviceMap = ConcurrentHashMap<String, WifiP2pDevice>()
     private var wifiP2pManager: WifiP2pManager? = null
@@ -127,6 +128,7 @@ object DataSyncWifiP2pManager {
         deviceMap.clear()
         unregisterReceiver()
         destroyed = true
+        thisDeviceAddress = null
     }
 
     @AccessedByFlutter
@@ -244,7 +246,6 @@ object DataSyncWifiP2pManager {
     @SuppressLint("NewApi")
     fun updateThisDevice(device: WifiP2pDevice?) {
         device ?: return
-        deviceMap[device.deviceAddress] = device
-        DataSyncMethodChannel.updateDeviceMap(deviceMap)
+        thisDeviceAddress = device
     }
 }

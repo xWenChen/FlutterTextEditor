@@ -1,9 +1,14 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/base_view_model.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/arch/mutable_state.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/constants/material3/app_space.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/detail/data_sync_detail_page.dart';
 
 import '../../../base/constants/load_state.dart';
+import '../../../base/constants/material3/app_shapes.dart';
 import '../feature/data_sync_service.dart';
 import '../feature/data_sync_wifi_p2p_device.dart';
 
@@ -47,5 +52,15 @@ class DataSyncListViewModel extends BaseViewModel {
     });
     notifyListeners();
     return true;
+  }
+
+  Future<void> showConnectTips(BuildContext context, DataSyncWifiP2pDevice device) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false, // 禁用点击背景黑色遮罩（Barrier）关闭 Dialog 的行为。
+      builder: (BuildContext context) {
+        return DataSyncDetailPage(currentDevice: device);
+      },
+    );
   }
 }

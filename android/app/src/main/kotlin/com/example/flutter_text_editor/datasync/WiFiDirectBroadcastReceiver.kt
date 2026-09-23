@@ -70,7 +70,7 @@ class WiFiDirectBroadcastReceiver(
                 }
             }
             WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION -> {
-                // 设备发生变化。
+                // 当前设备发生变化。
                 val device = IntentCompat.getParcelableExtra(
                     intent,
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE,

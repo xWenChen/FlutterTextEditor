@@ -144,9 +144,6 @@ class _DataSyncListPageState extends BaseState<DataSyncListViewModel, DataSyncLi
       return;
     }
     /// todo 响应点击操作
-    await context.goRouter.pushNamed(
-      RouteConstants.dataSyncDetail,
-      extra: data,
-    );
+    await viewModel.showConnectTips(context, data);
   }
 }
