@@ -82,8 +82,8 @@ class _DataSyncDetailPageState extends BaseState<DataSyncDetailViewModel, DataSy
                 Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
-                foregroundColor: context.colorScheme.onTertiary,
-                backgroundColor: context.colorScheme.tertiary,
+                foregroundColor: context.colorScheme.onPrimary,
+                backgroundColor: context.colorScheme.primary,
                 // 设置边框形状为操场跑道/胶囊形
                 shape: const StadiumBorder(),
                 // 建议加点左右 padding，让跑道形状更舒展
