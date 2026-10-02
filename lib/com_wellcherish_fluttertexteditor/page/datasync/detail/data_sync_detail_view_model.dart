@@ -45,4 +45,8 @@ class DataSyncDetailViewModel extends BaseViewModel {
     });
     return true;
   }
+
+  Future<void> trySyncToDevice(BuildContext context, DataSyncWifiP2pDevice device) async {
+    await _service?.connect(device.deviceAddress);
+  }
 }

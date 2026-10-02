@@ -49,7 +49,7 @@ class _DataSyncDetailPageState extends BaseState<DataSyncDetailViewModel, DataSy
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "连接设备并发送内容",
+              "连接设备并同步内容",
               textAlign: TextAlign.center,
               style: context.textTheme.titleMedium?.copyWith(
                 color: context.contentColor,
@@ -71,14 +71,15 @@ class _DataSyncDetailPageState extends BaseState<DataSyncDetailViewModel, DataSy
                       color: context.colorScheme.tertiary, // 可选：突出强调
                     ),
                   ),
-                  const TextSpan(text: ' 并向其发送文本？'),
+                  const TextSpan(text: ' 并向其同步内容？'),
                 ],
               ),
             ),
             SizedBox(height: AppSpace.medium,),
             // 按钮
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await viewModel.trySyncToDevice(context, device);
                 Navigator.of(context).pop();
               },
               style: TextButton.styleFrom(
@@ -89,7 +90,7 @@ class _DataSyncDetailPageState extends BaseState<DataSyncDetailViewModel, DataSy
                 // 建议加点左右 padding，让跑道形状更舒展
                 padding: const EdgeInsets.symmetric(horizontal: AppSpace.large, vertical: AppSpace.extraSmall),
               ),
-              child: const Text('连接并发送'),
+              child: const Text('连接并同步'),
             ),
             SizedBox(height: AppSpace.extraSmall,),
             TextButton(

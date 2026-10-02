@@ -3,6 +3,7 @@ package com.example.flutter_text_editor.datasync
 import android.annotation.SuppressLint
 import android.net.wifi.p2p.WifiP2pDevice
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import org.json.JSONObject
 
@@ -45,8 +46,12 @@ object DataSyncMethodChannel {
                         }
                     }
                 }
-                "disconnect" -> {
-                    DataSyncWifiP2pManager.disconnect { success ->
+                "startTransferData" -> {
+                    // connect 成功后，传输数据。
+                    startTransferData(call)
+                }
+                "disconnectAll" -> {
+                    DataSyncWifiP2pManager.disconnectAll { success ->
                         if (success) {
                             result.success(true)
                         } else {
@@ -223,5 +228,30 @@ object DataSyncMethodChannel {
             "isServiceDiscoveryCapable",
             device.isServiceDiscoveryCapable
         )
+    }
+
+    // 流程为 connect/受到广播通知，连接成功/开始传输数据。
+    private fun startTransferData(call: MethodCall) {
+        val deviceAddress = call.argument<String>("dir")
+        val info = DataSyncWifiP2pManager.info ?: return
+        /*if (info.groupFormed) {
+            // ✅ 已连接：组已形成，可获取 Group Owner IP 属性
+            val groupOwnerIP = info.groupOwnerAddress.hostAddress
+            // After the group negotiation, we assign the group owner as the file
+            // server. The file server is single threaded, single connection server
+            // socket.
+            DataSyncWifiP2pManager.updateThisDeviceStatus(DeviceStatus.Connected)
+            *//*if (info.isGroupOwner) {
+                // todo 重新尝试传输。
+                new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text))
+                .execute();
+            }*//*
+        } else {
+            // ❌ 已断开：组未形成或已解散
+            activity?.resetData()
+            // 没有在连接。
+            DataSyncWifiP2pManager.updateThisDeviceStatus(DeviceStatus.Idle)
+        }*/
+
     }
 }

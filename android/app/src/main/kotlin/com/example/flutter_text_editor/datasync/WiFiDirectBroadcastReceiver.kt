@@ -1,5 +1,6 @@
 package com.example.flutter_text_editor.datasync
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -19,6 +20,7 @@ class WiFiDirectBroadcastReceiver(
     private val activity: MainActivity?
 ) : BroadcastReceiver() {
 
+    @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     override fun onReceive(context: Context?, intent: Intent?) {
         val action = intent?.action ?: return
@@ -28,9 +30,9 @@ class WiFiDirectBroadcastReceiver(
                 val state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1)
                 if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
                     // Wifi Direct mode is enabled
-                    DataSyncWifiP2pManager.isWifiP2pEnabled = true
+                    DataSyncWifiP2pManager.isWifiP2pEnabled.set(true)
                 } else {
-                    DataSyncWifiP2pManager.isWifiP2pEnabled = false
+                    DataSyncWifiP2pManager.isWifiP2pEnabled.set(false)
                     activity?.resetData()
                 }
             }
@@ -51,13 +53,15 @@ class WiFiDirectBroadcastReceiver(
                 // we are connected with the other device, request connection info to find group owner IP
                 // call WifiP2pManager.ConnectionInfoListener.onConnectionInfoAvailable(info)
                 manager.requestConnectionInfo(channel) { info ->
+                    DataSyncWifiP2pManager.info = info
+                    // 通知flutter端可以传输数据了。
                     if (info.groupFormed) {
                         // ✅ 已连接：组已形成，可获取 Group Owner IP 属性
-                        DataSyncWifiP2pManager.info = info
                         val groupOwnerIP = info.groupOwnerAddress.hostAddress
                         // After the group negotiation, we assign the group owner as the file
                         // server. The file server is single threaded, single connection server
                         // socket.
+                        DataSyncWifiP2pManager.updateThisDeviceStatus(DeviceStatus.Connected)
                         /*if (info.isGroupOwner) {
                             // todo 重新尝试传输。
                             new FileServerAsyncTask(getActivity(), mContentView.findViewById(R.id.status_text))
@@ -66,6 +70,8 @@ class WiFiDirectBroadcastReceiver(
                     } else {
                         // ❌ 已断开：组未形成或已解散
                         activity?.resetData()
+                        // 没有在连接。
+                        DataSyncWifiP2pManager.updateThisDeviceStatus(DeviceStatus.Idle)
                     }
                 }
             }

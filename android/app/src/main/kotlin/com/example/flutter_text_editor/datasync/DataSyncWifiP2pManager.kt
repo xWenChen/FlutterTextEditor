@@ -16,16 +16,22 @@ import android.net.wifi.p2p.WifiP2pManager
 import android.os.Build
 import android.os.Looper
 import androidx.core.app.ActivityCompat
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.example.flutter_text_editor.MainActivity
 import com.example.flutter_text_editor.MainApplication
 import io.flutter.embedding.android.FlutterActivity
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 object DataSyncWifiP2pManager {
     const val PERMISSION_REQUEST_CODE = 1001
 
-    private var thisDeviceAddress: WifiP2pDevice? = null
+    private val thisDevice = DeviceInfo()
     // 维护的设备列表。device.deviceAddress -> WifiP2pDevice
     private val deviceMap = ConcurrentHashMap<String, WifiP2pDevice>()
     private var wifiP2pManager: WifiP2pManager? = null
@@ -43,7 +49,8 @@ object DataSyncWifiP2pManager {
         Manifest.permission.ACCESS_FINE_LOCATION
     }
 
-    var isWifiP2pEnabled = false
+    var isWifiP2pEnabled = AtomicBoolean(false)
+
     var info: WifiP2pInfo? = null
 
     private var receiver: WiFiDirectBroadcastReceiver? = null
@@ -76,7 +83,7 @@ object DataSyncWifiP2pManager {
      * 2. 初始化实例。
      * 3. 注册广播接收器。
      * */
-    @SuppressLint("NewApi")
+    @SuppressLint("NewApi", "MissingPermission")
     fun continueInit(activity: Activity): Boolean {
         if (!initP2pManager(activity)) {
             return false
@@ -128,7 +135,7 @@ object DataSyncWifiP2pManager {
         deviceMap.clear()
         unregisterReceiver()
         destroyed = true
-        thisDeviceAddress = null
+        thisDevice.reset()
     }
 
     @AccessedByFlutter
@@ -138,7 +145,7 @@ object DataSyncWifiP2pManager {
         return device.toString()
     }
 
-    @SuppressLint("NewApi")
+    @SuppressLint("NewApi", "MissingPermission")
     @AccessedByFlutter
     fun connect(deviceAddress: String?, onResult: (Boolean) -> Unit) {
         deviceAddress ?: return onResult(false)
@@ -150,6 +157,7 @@ object DataSyncWifiP2pManager {
         config.deviceAddress = deviceAddress
         config.wps.setup = WpsInfo.PBC
 
+        thisDevice.connectStatus = DeviceStatus.Connecting
         manager.connect(channel, config, object : WifiP2pManager.ActionListener {
             override fun onSuccess() {
                 // WiFiDirectBroadcastReceiver will notify us. Ignore for now.
@@ -162,9 +170,12 @@ object DataSyncWifiP2pManager {
         })
     }
 
+    /**
+     * removeGroup会销毁整个组，影响其他设备的连接。单个设备的断开，需要在Socket层面实现。
+     * */
     @SuppressLint("NewApi")
     @AccessedByFlutter
-    fun disconnect(onResult: (Boolean) -> Unit) {
+    fun disconnectAll(onResult: (Boolean) -> Unit) {
         val manager = wifiP2pManager ?: return onResult(false)
         val channel = wifiP2pChannel ?: return onResult(false)
 
@@ -246,6 +257,54 @@ object DataSyncWifiP2pManager {
     @SuppressLint("NewApi")
     fun updateThisDevice(device: WifiP2pDevice?) {
         device ?: return
-        thisDeviceAddress = device
+        thisDevice.device = device
+    }
+
+    @SuppressLint("NewApi")
+    fun updateThisDeviceStatus(status: DeviceStatus) {
+        thisDevice.connectStatus = status
+    }
+
+    /**
+     * 启动数据传输 Worker
+     *
+     * @param context 上下文
+     * @param useServerSocket 是否使用 ServerSocket（true: GO 设备，false: GC 设备）
+     * @param needSendData 是否发送数据（true: 发送端/旧机，false: 接收端/新机）
+     * @param filePath 发送时为源目录/文件路径，接收时为目标保存目录路径
+     * @param serverIp 目标 Server IP（GC 模式下必填，通常为 "192.168.49.1"；GO 模式下可省略）
+     * @param port Socket 监听/连接端口
+     */
+    fun startTransferWork(
+        useServerSocket: Boolean,
+        needSendData: Boolean,
+        filePath: String,
+        serverIp: String = DataTransferWorker.DEFAULT_GO_IP,
+        port: Int = DataTransferWorker.DEFAULT_PORT
+    ) {
+        val context = getActivity() ?: return
+
+        // 1. 构建传递给 Worker 的 inputData 参数
+        val inputData = workDataOf(
+            DataTransferWorker.PARAM_USE_SERVER_SOCKET to useServerSocket,
+            DataTransferWorker.PARAM_NEED_SEND_DATA to needSendData,
+            DataTransferWorker.PARAM_FILE_PATH to filePath,
+            DataTransferWorker.PARAM_SERVER_IP to serverIp,
+            DataTransferWorker.PARAM_PORT to port
+        )
+
+        // 2. 约束条件（要求设备当前网络处于连接状态，Wi-Fi P2P 组网完成后自动满足）
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        // 3. 构建 OneTimeWorkRequest
+        val transferRequest = OneTimeWorkRequestBuilder<DataTransferWorker>()
+            .setInputData(inputData)
+            .setConstraints(constraints)
+            .build()
+
+        // 4. 提交给 WorkManager 执行
+        WorkManager.getInstance(context).enqueue(transferRequest)
     }
 }
