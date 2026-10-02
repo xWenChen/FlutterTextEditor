@@ -13,6 +13,13 @@ class SettingsViewModel extends BaseViewModel {
 
   MutableState<List<SettingsItem>> dataList = MutableState(<SettingsItem>[
     SettingsItem(
+        type: SettingsType.dataBackup,
+        name: Strings.dataBackupTitle,
+        desc: Strings.dataBackupDesc,
+        pageRouteName: RouteConstants.dataBackup,
+        iconData: Icons.settings_backup_restore_rounded
+    ),
+    SettingsItem(
       type: SettingsType.dataSync,
       name: Strings.dataSyncTitle,
       desc: Strings.dataSyncDesc,

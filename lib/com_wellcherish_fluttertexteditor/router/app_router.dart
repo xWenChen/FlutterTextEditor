@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/extension/build_context_extension.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/base/log/log.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/colors/color_scheme_example.dart';
+import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/databackup/main/data_backup_page.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/detail/data_sync_detail_page.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/datasync/feature/data_sync_wifi_p2p_device.dart';
 import 'package:flutter_text_editor/com_wellcherish_fluttertexteditor/page/settings/settings_page.dart';
@@ -59,6 +60,13 @@ class AppRouter {
         path: "${RouteConstants.schema}${RouteConstants.settings}",
         builder: (context, state) {
           return SettingsPage();
+        },
+      ),
+      GoRoute(
+        name: RouteConstants.dataBackup,
+        path: "${RouteConstants.schema}${RouteConstants.dataBackup}",
+        builder: (context, state) {
+          return DataBackupPage();
         },
       ),
       GoRoute(

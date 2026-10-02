@@ -32,4 +32,16 @@ class Strings {
   static const String colorsTitle = "应用配色预览";
   static const String settingsTitle = "设置";
   static const String noDevice = "暂未发现设备";
+  /// 数据备份与恢复的Item
+  static const String dataBackupTitle = "数据备份";
+  static const String dataBackupDesc = "备份文档到系统的公共目录。备份完成后，可以手动导入到去其他设备上。";
+
+  static const String backupData = "备份数据";
+  static const String backupDataDesc = "备份文档到系统的公共目录。";
+  static const String restoreData = "恢复数据";
+  static const String restoreDataDesc = "从系统的公共目录恢复应用数据。";
+
+  static const String selectOperation = "请选择需要进行的操作：";
+
+  static const String start = "开始";
 }
