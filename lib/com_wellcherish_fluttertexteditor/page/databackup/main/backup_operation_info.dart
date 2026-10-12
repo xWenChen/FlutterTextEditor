@@ -40,5 +40,7 @@ enum OperationState {
   endBackup,
   waitRestore,
   inRestore,
-  endRestore;
+  endRestore,
+  permissionError,
+  fileSystemError;
 }

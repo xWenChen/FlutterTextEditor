@@ -54,23 +54,33 @@ class DataBackupViewModel extends BaseViewModel {
   }
 
   Future<void> syncData() async {
+    updateProgress(0);
+    operationState.value = OperationState.waitBackup;
     // 1. 检查权限
-    await requestStoragePermission();
+    final isGranted = await requestStoragePermission();
+
+    if (!isGranted) {
+      operationState.value = OperationState.permissionError;
+      return;
+    }
 
     // 2. 指定你需要读取和打包的目录 (假设是 App 的文档目录)
     Directory? appDocDir = await EditorFileUtils.documentDir;
     if (appDocDir == null) {
+      operationState.value = OperationState.fileSystemError;
       return;
     }
 
     Directory targetDir = Directory('${appDocDir.path}'); // 目标文件夹
 
+    operationState.value = OperationState.inBackup;
     // 3. 读取并压缩
     List<int>? zipBytes = await saveToZip(targetDir);
 
     if (zipBytes != null) {
       // 4. 保存到系统公共目录
       await exportZipToPublicDirectory(zipBytes, "backup_${DateTime.now().millisecondsSinceEpoch}");
+      operationState.value = OperationState.endBackup;
     }
   }
 
@@ -84,8 +94,10 @@ class DataBackupViewModel extends BaseViewModel {
 
     // recursive: true 递归获取所有子文件夹和文件
     final List<FileSystemEntity> entities = sourceDir.listSync(recursive: true);
+    final total = entities.length;
 
-    for (final entity in entities) {
+    for (int i = 0; i < total; i++) {
+      final entity = entities[i];
       // 1. 计算相对路径，并统一替换 Windows 路径分隔符 '\\' 为 '/'
       String relativePath = entity.path.substring(sourceDir.path.length + 1);
       relativePath = relativePath.replaceAll('\\', '/');
@@ -103,6 +115,9 @@ class DataBackupViewModel extends BaseViewModel {
         final archiveFile = ArchiveFile(relativePath, 0, null);
         archive.addFile(archiveFile);
       }
+
+      // 压缩过程最多占 90%。
+      operationProgress.value = i * 100 ~/ total;
     }
 
     // 使用 ZipEncoder 进行编码
@@ -158,6 +173,8 @@ class DataBackupViewModel extends BaseViewModel {
         ext: 'zip',
         mimeType: MimeType.zip,
       );
+
+      operationProgress.value = 100;
     } catch (e) {
       // 打印异常。
     }
