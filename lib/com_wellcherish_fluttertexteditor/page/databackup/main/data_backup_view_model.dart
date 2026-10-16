@@ -117,7 +117,7 @@ class DataBackupViewModel extends BaseViewModel {
       }
 
       // 压缩过程最多占 90%。
-      operationProgress.value = i * 100 ~/ total;
+      updateProgress(i * 100 ~/ total);
     }
 
     // 使用 ZipEncoder 进行编码
