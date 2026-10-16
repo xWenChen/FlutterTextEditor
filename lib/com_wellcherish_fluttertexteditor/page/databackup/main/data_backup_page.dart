@@ -40,7 +40,7 @@ class _DataBackupPageState extends BaseState<DataBackupViewModel, DataBackupPage
         ),
         body: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: AppSpace.medium,
+            horizontal: AppSpace.small,
             vertical: AppSpace.large80,
           ),
           alignment: Alignment.topCenter,
@@ -58,7 +58,7 @@ class _DataBackupPageState extends BaseState<DataBackupViewModel, DataBackupPage
               ),
               // 操作。
               Container(
-                padding: EdgeInsets.all(AppSpace.small),
+                padding: EdgeInsets.symmetric(vertical: AppSpace.small),
                 child: ListenableBuilder(
                   listenable: Listenable.merge([viewModel.supportOperationList, viewModel.selectedOperation]),
                   builder: (context, child) => Column(
@@ -74,16 +74,11 @@ class _DataBackupPageState extends BaseState<DataBackupViewModel, DataBackupPage
                               color: context.contentColor,
                             ),
                           ),
-                          DropDownList(
+                          DropDownList<BackupOperationInfo>(
                             items: viewModel.supportOperationList.value.map((BackupOperationInfo item) {
-                              return DropdownMenuEntry<BackupOperationInfo>(
+                              return DropdownMenuItemModel<BackupOperationInfo>(
                                 value: item,
-                                label: item.title, // 直接传入字符串文本
-                                labelWidget: Text(
-                                  item.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis, // 超出时自动显示 "..."
-                                ),
+                                label: item.title, // 传入显示的文本
                               );
                             }).toList(),
                             selectedValue: viewModel.selectedOperation.value,
@@ -103,7 +98,7 @@ class _DataBackupPageState extends BaseState<DataBackupViewModel, DataBackupPage
                       ),
                     ],
                   ),
-              ),
+                ),
               ),
               // 开始按钮。
               Container(
@@ -132,6 +127,7 @@ class _DataBackupPageState extends BaseState<DataBackupViewModel, DataBackupPage
                   },
                 ),
               ),
+
             ],
           ),
         ),
