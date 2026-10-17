@@ -133,7 +133,7 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
                   'assets/images/ic_arrow_up_down.png', // 你的上箭头图片路径
                   width: AppSize.smallIcon,
                   height: AppSize.smallIcon,
-                  color: Colors.grey, // 直接指定灰色，这会覆盖原图颜色（如果是单色 PNG）
+                  color: context.contentColor,
                 ),
               ],
             ),
