@@ -139,6 +139,7 @@ class DataBackupViewModel extends BaseViewModel {
       }
     } catch (e, stackTrace) {
       print("❌ 保存导出文件失败: $e");
+      updateProgress(0);
       operationState.value = OperationState.fileSystemError;
     }
   }
@@ -174,37 +175,41 @@ class DataBackupViewModel extends BaseViewModel {
       return false;
     }
   }
+}
 
-  // =====================================================================
-  // 📌 后台 Isolate 入口函数（按要求采用 ZipFileEncoder）
-  // =====================================================================
-  void _zipIsolateEntry(List<dynamic> args) {
-    SendPort sendPort = args[0];
-    String sourceDirPath = args[1];
+/// =====================================================================
+/// 📌 后台 Isolate 入口函数（按要求采用 ZipFileEncoder）
+///
+/// 在 Dart 中，如果 Isolate 的入口函数写在类内部（哪怕是静态方法，或者在方法内部写成了 lambda 闭包），
+/// 它会隐式地把当前类的实例（this）或者上下文当作参数传递给子线程。而 DataBackupViewModel 内部包含了 MutableState、
+/// 监听器（Listeners）以及各种无法跨线程序列化的复杂对象，从而触发了 object is unsendable 报错。
+/// =====================================================================
+void _zipIsolateEntry(List<dynamic> args) {
+  SendPort sendPort = args[0];
+  String sourceDirPath = args[1];
 
-    File? tempZipFile;
-    try {
-      final sourceDir = Directory(sourceDirPath);
-      if (!sourceDir.existsSync()) {
-        sendPort.send(null);
-        return;
-      }
-
-      // 在系统临时目录生成压缩包
-      final tempDir = Directory.systemTemp;
-      tempZipFile = File('${tempDir.path}/temp_backup_${DateTime.now().millisecondsSinceEpoch}.zip');
-
-      // 采用 ZipFileEncoder 压缩
-      final encoder = ZipFileEncoder();
-      encoder.create(tempZipFile.path);
-      encoder.addDirectory(sourceDir); // 自动保留全部层级和空目录
-      encoder.close();
-
-      // 同步读取打包好的字节并传回主线程
-      final zipBytes = tempZipFile.readAsBytesSync();
-      sendPort.send(zipBytes);
-    } catch (e) {
-      sendPort.send("Error: $e");
+  File? tempZipFile;
+  try {
+    final sourceDir = Directory(sourceDirPath);
+    if (!sourceDir.existsSync()) {
+      sendPort.send(null);
+      return;
     }
+
+    // 在系统临时目录生成压缩包
+    final tempDir = Directory.systemTemp;
+    tempZipFile = File('${tempDir.path}/temp_backup_${DateTime.now().millisecondsSinceEpoch}.zip');
+
+    // 采用 ZipFileEncoder 压缩
+    final encoder = ZipFileEncoder();
+    encoder.create(tempZipFile.path);
+    encoder.addDirectory(sourceDir); // 自动保留全部层级和空目录
+    encoder.close();
+
+    // 同步读取打包好的字节并传回主线程
+    final zipBytes = tempZipFile.readAsBytesSync();
+    sendPort.send(zipBytes);
+  } catch (e) {
+    sendPort.send("Error: $e");
   }
 }
