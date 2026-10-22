@@ -10,12 +10,13 @@ import java.io.File
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.lifecycleScope
+import io.flutter.embedding.android.FlutterFragmentActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
     companion object {
         private const val REQUEST_CODE_CREATE_ZIP = 1001
     }
